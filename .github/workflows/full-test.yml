@@ -1,0 +1,24 @@
+name: Full Test Suite (Manual)
+
+on:
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: src
+
+jobs:
+  full-test:
+    name: Full Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - name: Install dependencies
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[dev,benchmark]" 2>/dev/null || pip install pytest pytest-cov numpy zeyrek
+      - name: Run ALL tests
+        run: python -m pytest tests/ -v --tb=short

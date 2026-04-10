@@ -1,0 +1,5 @@
+# Entropy-only acquisition baseline
+acquisition:
+  method: "entropy"
+  batch_size: 500
+  retrain_every_n: 500

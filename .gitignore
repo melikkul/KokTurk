@@ -1,0 +1,90 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# HPC / SLURM (internal)
+scripts/truba/
+docs/TRUBA_SETUP.md
+
+# ML artifacts
+mlruns/
+mlflow.db
+*.onnx
+*.engine
+
+# Large model files (use DVC or download scripts)
+models/berturk/
+models/word2vec/*.bin
+models/*/best_model.pt
+models/*/*/best_model.pt
+models/*/checkpoint_*.pt
+models/*/*/checkpoint_*.pt
+models/*/*.zip
+!models/vocabs/
+models/vocabs/word_vocab_2.5M.json
+
+# Large data files (use DVC or download scripts)
+data/resource/tr_gold_morph.db
+data/resource/exports/
+data/resource/training_*.jsonl
+data/external/
+data/processed/
+data/prelabeled/
+data/weak_labels/
+data/splits/
+data/gold/
+*.tsv
+*.parquet
+
+# Coverage and testing
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# SLURM
+logs/
+*.out
+*.err
+jobs/submitted_jobs.log
+
+# Claude/AI artifacts
+.claude/
+CLAUDE.md
+STATUS.md
+
+# Torch compile cache
+torchinductor_*/
+
+# Secrets
+*.env
+.env.*
+
+# DVC cache
+.dvc/cache/
+
+# Jupyter
+.ipynb_checkpoints/

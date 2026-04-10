@@ -1,0 +1,63 @@
+{
+  "intrinsic": {
+    "exact_match": 0.8195331695331696,
+    "root_accuracy": 0.8501228501228502,
+    "precision": 0.9302250020307042,
+    "recall": 0.9389963922597573,
+    "f1": 0.9345901171093972,
+    "root_errors": 1220.0,
+    "tag_errors": 249.0,
+    "total_test_tokens": 8140.0
+  },
+  "classification": {
+    "ttc3600_original_tfidf": {
+      "macro_f1_mean": 0.915675701825068,
+      "macro_f1_std": 0.006639625102976641,
+      "note": "UCI pre-computed TF-IDF (7508 features) + LogReg"
+    },
+    "ttc3600_zemberek_tfidf": {
+      "macro_f1_mean": 0.9029426367950482,
+      "macro_f1_std": 0.008871717126761814,
+      "note": "Zemberek-stemmed TF-IDF + LogReg"
+    },
+    "tfidf_atomized": {
+      "macro_f1_mean": 0.16557364486165027,
+      "macro_f1_std": 0.015068838956300847
+    },
+    "tfidf_raw": {
+      "macro_f1_mean": 0.1764600597275311,
+      "macro_f1_std": 0.020228272467396904
+    },
+    "logreg_atomized_bigram": {
+      "macro_f1_mean": 0.16680321554390903,
+      "macro_f1_std": 0.014982089193861738,
+      "note": "Optimized TF-IDF (50K features, max_df=0.95, min_df=2)"
+    },
+    "logreg_stacked_features": {
+      "macro_f1_mean": 0.16438549288962295,
+      "macro_f1_std": 0.018558172813361903,
+      "note": "Word bigrams + char 3-5 grams, 50K features total"
+    },
+    "logreg_morph_features": {
+      "macro_f1_mean": 0.1722375091252417,
+      "macro_f1_std": 0.012814775211199446,
+      "note": "TF-IDF + POS/case/tense distributions + lexical diversity"
+    },
+    "ensemble_classifier": {
+      "macro_f1_mean": 0.16885281364240093,
+      "macro_f1_std": 0.0140351254545785,
+      "note": "Soft voting: LogReg + CalibratedSVC + SGD"
+    }
+  },
+  "efficiency": {
+    "zeyrek": {
+      "tokens_per_sec": 6379.877918004585,
+      "model_size_mb": 0.0
+    },
+    "gru_atomizer": {
+      "model_size_mb": 8.6,
+      "params": 2255487.0
+    }
+  },
+  "bpe_failure_count": 10
+}

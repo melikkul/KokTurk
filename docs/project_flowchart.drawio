@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-06T00:00:00.000Z" agent="Claude Code" version="21.0.0" type="device">
+  <diagram id="neural-atomizer-pipeline" name="Neural Morphological Atomizer Pipeline">
+    <mxGraphModel dx="2800" dy="2200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="4000" pageHeight="3800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ================================================================ -->
+        <!-- TITLE                                                            -->
+        <!-- ================================================================ -->
+        <mxCell id="title" value="Neural Morphological Atomizer for Turkish — Full Project Pipeline" style="text;html=1;fontSize=18;fontFamily=Helvetica;fontStyle=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="200" y="4" width="700" height="32" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="example" value="evlerinden → ev +PLU +POSS.3SG +ABL" style="text;html=1;fontSize=11;fontFamily=Courier New;fontStyle=2;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#999999;rounded=1;spacingLeft=8;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="900" y="6" width="300" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LAYER 1: Data Pipeline (blue)                                   -->
+        <!-- ================================================================ -->
+        <mxCell id="lane1" value="Layer 1 — Data Pipeline" style="shape=swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=13;horizontal=1;collapsible=0;rounded=1;arcSize=8;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1100" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L1_1" value="Raw Corpus&#xa;(BOUN Treebank)&#xa;9,578 sentences" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane1">
+          <mxGeometry x="20" y="50" width="170" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L1_2" value="Zeyrek Analysis&#xa;99.9% coverage&#xa;66 OOV tokens" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane1">
+          <mxGeometry x="240" y="50" width="170" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L1_3" value="6 Labeling Functions&#xa;(zeyrek_unamb, suffix_regex,&#xa;pos_bigram, gazetteer...)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane1">
+          <mxGeometry x="460" y="50" width="190" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L1_4" value="Precision-Weighted&#xa;Label Model&#xa;(zeyrek=0.95, suffix=0.92)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane1">
+          <mxGeometry x="700" y="50" width="190" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L1_5" value="Probabilistic Labels&#xa;124,857 tokens&#xa;mean conf: 0.77" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="lane1">
+          <mxGeometry x="920" y="50" width="160" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_L1_12" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#6c8ebf;strokeWidth=1.5;" edge="1" source="L1_1" target="L1_2" parent="lane1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L1_23" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#6c8ebf;strokeWidth=1.5;" edge="1" source="L1_2" target="L1_3" parent="lane1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L1_34" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#6c8ebf;strokeWidth=1.5;" edge="1" source="L1_3" target="L1_4" parent="lane1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L1_45" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#6c8ebf;strokeWidth=1.5;" edge="1" source="L1_4" target="L1_5" parent="lane1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LAYER 2: Corpus Construction (green)                            -->
+        <!-- ================================================================ -->
+        <mxCell id="lane2" value="Layer 2 — Corpus Construction" style="shape=swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;horizontal=1;collapsible=0;rounded=1;arcSize=8;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="270" width="1100" height="280" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_1" value="Seed Selection&#xa;200 sentences&#xa;stratified by ambiguity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane2">
+          <mxGeometry x="20" y="45" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_2" value="Auto-Accept&#xa;64.2% (1,603 tokens)&#xa;Zeyrek top-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane2">
+          <mxGeometry x="240" y="45" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_3" value="Terminal Annotation&#xa;893 tokens&#xa;BALD+MAD scoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane2">
+          <mxGeometry x="460" y="45" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_4" value="Gold Tier&#xa;2,496 tokens&#xa;(human annotated)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="lane2">
+          <mxGeometry x="700" y="45" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_5" value="Category-Specific&#xa;Thresholds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane2">
+          <mxGeometry x="20" y="155" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_6" value="Silver-Auto Tier&#xa;61,516 tokens&#xa;(conf ≥ threshold)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane2">
+          <mxGeometry x="240" y="155" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_7" value="Silver-Agreed Tier&#xa;16,525 tokens&#xa;(multi-source agree)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane2">
+          <mxGeometry x="460" y="155" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L2_corpus" value="Tiered Corpus&#xa;80,537 tokens&#xa;(train/val/test splits)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=center;verticalAlign=middle;fontStyle=1;strokeWidth=2;" vertex="1" parent="lane2">
+          <mxGeometry x="880" y="100" width="190" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_L2_12" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;" edge="1" source="L2_1" target="L2_2" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L2_23" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;" edge="1" source="L2_2" target="L2_3" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L2_34" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;" edge="1" source="L2_3" target="L2_4" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L2_56" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;" edge="1" source="L2_5" target="L2_6" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L2_57" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;" edge="1" source="L2_5" target="L2_7" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L2_4c" value="gold" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;fontSize=10;fontColor=#82b366;" edge="1" source="L2_4" target="L2_corpus" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L2_6c" value="silver-auto" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;fontSize=10;fontColor=#82b366;" edge="1" source="L2_6" target="L2_corpus" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L2_7c" value="silver-agreed" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#82b366;strokeWidth=1.5;fontSize=10;fontColor=#82b366;" edge="1" source="L2_7" target="L2_corpus" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LAYER 2.5: Resource Database (teal) — NEW                       -->
+        <!-- ================================================================ -->
+        <mxCell id="lane25" value="Layer 2.5 — TR-Gold-Morph Resource Database" style="shape=swimlane;startSize=30;fillColor=#d5f5e3;strokeColor=#1e8449;fontStyle=1;fontSize=13;horizontal=1;collapsible=0;rounded=1;arcSize=8;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="1100" height="270" as="geometry"/>
+        </mxCell>
+
+        <!-- DB Schema info box -->
+        <mxCell id="RES_schema" value="DB Schema&#xa;(SQLite)&#xa;surface | lemma | canonical_tags&#xa;pos | source | tier | confidence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="lane25">
+          <mxGeometry x="20" y="40" width="210" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Gen 0 -->
+        <mxCell id="RES_g0" value="Gen 0 — Bootstrap&#xa;BOUN + IMST + UniMorph&#xa;+ Zeyrek bulk analysis&#xa;Target: ≥200K entries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane25">
+          <mxGeometry x="280" y="40" width="210" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Gen 1 -->
+        <mxCell id="RES_g1" value="Gen 1 — Wikipedia&#xa;HuggingFace stream&#xa;Turkish Wikipedia 20231101&#xa;Target: ≥500K entries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane25">
+          <mxGeometry x="540" y="40" width="210" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Gen 2 -->
+        <mxCell id="RES_g2" value="Gen 2 — OSCAR-2301&#xa;oscar-corpus/OSCAR-2301&#xa;doc[&quot;content&quot;] field&#xa;Target: ≥2M entries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane25">
+          <mxGeometry x="800" y="40" width="210" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Tier system -->
+        <mxCell id="RES_tiers" value="Tier Assignment&#xa;gold: treebank-sourced (BOUN/IMST)&#xa;silver: ≥2 sources agree on canonical_tags&#xa;bronze: single source only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=11;align=left;verticalAlign=middle;spacingLeft=8;" vertex="1" parent="lane25">
+          <mxGeometry x="20" y="155" width="380" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Resource stats -->
+        <mxCell id="RES_stats" value="Resource Stats (post-Gen 2)&#xa;≥2M unique surface forms&#xa;≥2M canonical analyses&#xa;Zeyrek coverage: ~78%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=11;align=left;verticalAlign=middle;spacingLeft=8;" vertex="1" parent="lane25">
+          <mxGeometry x="440" y="155" width="280" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Word2Vec note -->
+        <mxCell id="RES_w2v" value="Word2Vec Training&#xa;gensim CBOW 128-dim&#xa;BOUN + Wikipedia + TTC-3600&#xa;→ models/word2vec/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane25">
+          <mxGeometry x="780" y="155" width="210" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Resource DB internal edges -->
+        <mxCell id="e_RES_sg0" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#1e8449;strokeWidth=1.5;" edge="1" source="RES_schema" target="RES_g0" parent="lane25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_RES_g01" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#1e8449;strokeWidth=1.5;" edge="1" source="RES_g0" target="RES_g1" parent="lane25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_RES_g12" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#1e8449;strokeWidth=1.5;" edge="1" source="RES_g1" target="RES_g2" parent="lane25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LAYER 3: Active Learning Loop (orange)                          -->
+        <!-- ================================================================ -->
+        <mxCell id="lane3" value="Layer 3 — Active Learning Loop" style="shape=swimlane;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=13;horizontal=1;collapsible=0;rounded=1;arcSize=8;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="930" width="760" height="300" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L3_1" value="Train Draft&#xa;Model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane3">
+          <mxGeometry x="30" y="55" width="160" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L3_2" value="BALD + MAD&#xa;Scoring&#xa;(0.55·BALD + 0.45·MAD)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane3">
+          <mxGeometry x="250" y="55" width="180" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L3_3" value="Select Batch&#xa;top-50 sentences" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane3">
+          <mxGeometry x="470" y="55" width="160" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L3_4" value="Annotate&#xa;(terminal tool)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane3">
+          <mxGeometry x="560" y="170" width="160" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L3_5" value="Merge into&#xa;Corpus" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane3">
+          <mxGeometry x="310" y="170" width="160" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L3_dec" value="Converged?&#xa;(Δacc &lt; 0.003)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane3">
+          <mxGeometry x="50" y="155" width="170" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_L3_12" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#d6b656;strokeWidth=1.5;" edge="1" source="L3_1" target="L3_2" parent="lane3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L3_23" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#d6b656;strokeWidth=1.5;" edge="1" source="L3_2" target="L3_3" parent="lane3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L3_34" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#d6b656;strokeWidth=1.5;" edge="1" source="L3_3" target="L3_4" parent="lane3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L3_45" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#d6b656;strokeWidth=1.5;" edge="1" source="L3_4" target="L3_5" parent="lane3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L3_5d" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#d6b656;strokeWidth=1.5;" edge="1" source="L3_5" target="L3_dec" parent="lane3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L3_no" value="No" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#d6b656;strokeWidth=1.5;fontSize=10;fontColor=#d6b656;fontStyle=1;" edge="1" source="L3_dec" target="L3_1" parent="lane3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="135" y="140"/>
+              <mxPoint x="110" y="140"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LAYER 4: Model Training v4 (red)                                -->
+        <!-- ================================================================ -->
+        <mxCell id="lane4" value="Layer 4 — Model Training (v1 → v4)" style="shape=swimlane;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=13;horizontal=1;collapsible=0;rounded=1;arcSize=8;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1290" width="1100" height="560" as="geometry"/>
+        </mxCell>
+
+        <!-- ---- ROW 1: Model Evolution ---- -->
+        <mxCell id="L4_row1_label" value="Model Architecture Evolution" style="text;html=1;fontSize=10;fontStyle=1;fontColor=#b85450;align=left;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="35" width="220" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_v1" value="v1 — MorphAtomizer&#xa;GRU Seq2Seq + Attn&#xa;2.2M params&#xa;(single_seq2seq)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="55" width="200" height="85" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_v2" value="v2 — DualHeadAtomizer&#xa;Root Head (1-pass MLP)&#xa;+ Cond. Tag Decoder&#xa;(no root-error propagation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="265" y="55" width="210" height="85" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_v4" value="v4 — ContextualDualHead&#xa;Atomizer&#xa;+ Additive Fusion + LayerNorm&#xa;Context dropout p=0.3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=center;verticalAlign=middle;strokeWidth=2;" vertex="1" parent="lane4">
+          <mxGeometry x="525" y="55" width="215" height="85" as="geometry"/>
+        </mxCell>
+
+        <!-- Context encoders box -->
+        <mxCell id="L4_ce_box" value="Context Encoders" style="shape=swimlane;startSize=22;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;fontStyle=1;rounded=1;arcSize=5;" vertex="1" parent="lane4">
+          <mxGeometry x="788" y="48" width="295" height="98" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_ce_w2v" value="Word2VecContext&#xa;BiGRU over ±2 words&#xa;(B,4) neighbours" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="L4_ce_box">
+          <mxGeometry x="8" y="27" width="130" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_ce_bert" value="BERTurkContext&#xa;frozen 768d→dim&#xa;injectable mock (CI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="L4_ce_box">
+          <mxGeometry x="152" y="27" width="130" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_L4_v12" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_v1" target="L4v_v2" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_v24" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_v2" target="L4v_v4" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_v4_ce" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;dashed=1;" edge="1" source="L4_ce_box" target="L4v_v4" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ---- ROW 2: TAAC Curriculum ---- -->
+        <mxCell id="L4_row2_label" value="TAAC — Tier-Aware Adaptive Curriculum" style="text;html=1;fontSize=10;fontStyle=1;fontColor=#b85450;align=left;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="162" width="320" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_taac" value="TAAC&#xa;|Δloss| &lt; ε for patience epochs&#xa;OR epoch ≥ max_epochs&#xa;(hard cap forces transition)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="182" width="195" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_ph1" value="1. gold_only&#xa;LR × 1.0&#xa;{GOLD}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="265" y="182" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_ph2" value="2. +silver_auto&#xa;LR × 0.8&#xa;{GOLD, SILVER_AUTO}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="420" y="182" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_ph3" value="3. all_tiers&#xa;LR × 0.5&#xa;{GOLD,SA,AGREED}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="575" y="182" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_ph4" value="4. gold_calib&#xa;LR × 0.3&#xa;{GOLD}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="730" y="182" width="135" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_ph5" value="5. all_final&#xa;LR × 0.1&#xa;{GOLD,SA,AGREED}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="880" y="182" width="135" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_L4_taac_p1" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_taac" target="L4v_ph1" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_p12" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_ph1" target="L4v_ph2" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_p23" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_ph2" target="L4v_ph3" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_p34" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_ph3" target="L4v_ph4" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_p45" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_ph4" target="L4v_ph5" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ---- ROW 3: Training Ingredients ---- -->
+        <mxCell id="L4_row3_label" value="Training Components" style="text;html=1;fontSize=10;fontStyle=1;fontColor=#b85450;align=left;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="282" width="200" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_tw" value="Tier-Weighted Loss&#xa;Gold×5.0 | SA×1.0 | Ag×0.7&#xa;compute_tier_weights()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="302" width="200" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_ss" value="Scheduled Sampling&#xa;Inverse sigmoid k=5&#xa;ratio = k/(k+exp(epoch/k))" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="265" y="302" width="200" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_gc" value="Gradient Clipping&#xa;max_norm=5.0&#xa;clip_grad_norm_()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="510" y="302" width="190" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4v_sampler" value="SubsetRandomSampler&#xa;Tier filter / epoch&#xa;build_tier_sampler()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="750" y="302" width="200" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Best model output -->
+        <mxCell id="L4v_best" value="v4 Best Model&#xa;target EM &gt; 85%&#xa;(best_model.pt)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;align=center;verticalAlign=middle;fontStyle=1;strokeWidth=2;shadow=1;" vertex="1" parent="lane4">
+          <mxGeometry x="958" y="295" width="125" height="85" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_L4_tw_best" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=2;" edge="1" source="L4v_tw" target="L4v_best" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_ss_best" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4v_ss" target="L4v_best" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ---- ROW 4: Ablation Study ---- -->
+        <mxCell id="L4_row4_label" value="Ablation Study — submit_ablations.sh  (SLURM --array=0-4,  akya-cuda)" style="text;html=1;fontSize=10;fontStyle=1;fontColor=#b85450;align=left;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="390" width="600" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_abl0" value="ID0&#xa;seq2seq + fixed&#xa;TRUE baseline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="20" y="415" width="170" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_abl1" value="ID1&#xa;dual_head + fixed&#xa;+dual-head" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="200" y="415" width="170" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_abl2" value="ID2&#xa;ctxdualhead + fixed&#xa;+context (word2vec)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="380" y="415" width="170" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_abl3" value="ID3&#xa;dual_head + TAAC&#xa;+TAAC (isolated)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6e6;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="560" y="415" width="170" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_abl4" value="ID4 FULL v4&#xa;ctxdualhead+TAAC&#xa;+ctx+TAAC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=center;verticalAlign=middle;fontStyle=1;strokeWidth=2;" vertex="1" parent="lane4">
+          <mxGeometry x="740" y="415" width="170" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L4_delta" value="Δ Analysis:&#xa;Δ(dual-head) = ID1 − ID0&#xa;Δ(context)   = ID2 − ID1&#xa;Δ(TAAC)      = ID4 − ID2" style="text;html=1;fontSize=10;fontColor=#b85450;fontStyle=2;align=left;verticalAlign=middle;" vertex="1" parent="lane4">
+          <mxGeometry x="930" y="415" width="155" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Ablation arrows (chain) -->
+        <mxCell id="e_L4_a01" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4_abl0" target="L4_abl1" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_a12" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4_abl1" target="L4_abl2" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_a23" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4_abl2" target="L4_abl3" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L4_a34" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#b85450;strokeWidth=1.5;" edge="1" source="L4_abl3" target="L4_abl4" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LAYER 5: Evaluation (purple)                                    -->
+        <!-- ================================================================ -->
+        <mxCell id="lane5" value="Layer 5 — Evaluation" style="shape=swimlane;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;fontSize=13;horizontal=1;collapsible=0;rounded=1;arcSize=8;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1910" width="1100" height="280" as="geometry"/>
+        </mxCell>
+
+        <!-- Row 1: intrinsic / ensemble -->
+        <mxCell id="L5_1" value="Intrinsic Eval&#xa;Exact Match | Root Acc&#xa;Tag F1 (per-token)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane5">
+          <mxGeometry x="20" y="45" width="190" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L5_mis" value="MIS Metric&#xa;α·H_morph + β·D_canon&#xa;+ γ·C_struct&#xa;(α=0.4, β=0.3, γ=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="lane5">
+          <mxGeometry x="260" y="45" width="195" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L5_3" value="TTC-3600&#xa;Atomization&#xa;+ PCAG fusion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane5">
+          <mxGeometry x="510" y="45" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L5_4" value="8 Classification&#xa;Methods&#xa;TextCNN + BERTurk..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane5">
+          <mxGeometry x="730" y="45" width="170" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Row 2: statistics / ablation results / report -->
+        <mxCell id="L5_2" value="5× Seed Ensemble&#xa;(majority vote, variance)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane5">
+          <mxGeometry x="20" y="155" width="190" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L5_abl_res" value="Ablation Results Table&#xa;Δ(dual-head): ? EM&#xa;Δ(context): ? EM&#xa;Δ(TAAC): ? EM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane5">
+          <mxGeometry x="260" y="152" width="195" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L5_5" value="Statistical Significance&#xa;Paired Bootstrap&#xa;Holm-Bonferroni" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="lane5">
+          <mxGeometry x="510" y="152" width="190" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L5_6" value="Benchmark Report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;align=center;verticalAlign=middle;fontStyle=1;strokeWidth=2;" vertex="1" parent="lane5">
+          <mxGeometry x="940" y="100" width="140" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Layer 5 internal edges -->
+        <mxCell id="e_L5_13" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#9673a6;strokeWidth=1.5;" edge="1" source="L5_1" target="L5_3" parent="lane5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L5_34" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#9673a6;strokeWidth=1.5;" edge="1" source="L5_3" target="L5_4" parent="lane5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L5_mis_res" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#9673a6;strokeWidth=1.5;" edge="1" source="L5_mis" target="L5_abl_res" parent="lane5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L5_45_sig" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#9673a6;strokeWidth=1.5;" edge="1" source="L5_4" target="L5_5" parent="lane5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_L5_56" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#9673a6;strokeWidth=1.5;" edge="1" source="L5_5" target="L5_6" parent="lane5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LAYER 6: Deliverables (gold)                                    -->
+        <!-- ================================================================ -->
+        <mxCell id="lane6" value="Layer 6 — Deliverables" style="shape=swimlane;startSize=30;fillColor=#FFF4C8;strokeColor=#D4A800;fontStyle=1;fontSize=13;horizontal=1;collapsible=0;rounded=1;arcSize=8;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2245" width="1100" height="155" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L6_1" value="D1: TR-Gold-Morph&#xa;Corpus (80K+ tokens)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4C8;strokeColor=#D4A800;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;shadow=1;" vertex="1" parent="lane6">
+          <mxGeometry x="20" y="50" width="200" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L6_res" value="D1b: Resource DB&#xa;(≥2M entries, 3 tiers)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4C8;strokeColor=#D4A800;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;shadow=1;" vertex="1" parent="lane6">
+          <mxGeometry x="240" y="50" width="200" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L6_2" value="D2: Neural Atomizer v4&#xa;(contextual_dual_head)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4C8;strokeColor=#D4A800;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;shadow=1;" vertex="1" parent="lane6">
+          <mxGeometry x="460" y="50" width="200" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L6_3" value="D3: Benchmark Report&#xa;(ablation + MIS + significance)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4C8;strokeColor=#D4A800;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;shadow=1;" vertex="1" parent="lane6">
+          <mxGeometry x="680" y="50" width="200" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="L6_4" value="D4: morpho-tr&#xa;Library (PyPI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4C8;strokeColor=#D4A800;fontSize=11;align=center;verticalAlign=middle;fontStyle=1;shadow=1;" vertex="1" parent="lane6">
+          <mxGeometry x="900" y="50" width="180" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- CROSS-LAYER EDGES (in root parent)                              -->
+        <!-- ================================================================ -->
+
+        <!-- L1: Probabilistic Labels → L2: Category-Specific Thresholds -->
+        <mxCell id="e_cross_L1_L2" value="124K prob. labels" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#333333;strokeWidth=2;fontSize=10;fontColor=#333333;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="L1_5" target="L2_5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1025" y="245"/>
+              <mxPoint x="145" y="245"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L1: BOUN Treebank → Resource DB Gen 0 (new) -->
+        <mxCell id="e_cross_L1_RES" value="BOUN treebank" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#1e8449;strokeWidth=2;fontSize=10;fontColor=#1e8449;fontStyle=1;dashed=1;dashPattern=6 3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="L1_1" target="RES_g0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1190" y="115"/>
+              <mxPoint x="1190" y="720"/>
+              <mxPoint x="330" y="720"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L2: Corpus → L3: Active Learning -->
+        <mxCell id="e_cross_L2_L3" value="80K tiered tokens" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#333333;strokeWidth=2;fontSize=10;fontColor=#333333;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="L2_corpus" target="L3_1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1175" y="450"/>
+              <mxPoint x="1175" y="990"/>
+              <mxPoint x="230" y="990"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L2: Corpus → L4: Training data (dashed) -->
+        <mxCell id="e_cross_L2_L4" value="tiered training data" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#555555;strokeWidth=1.5;fontSize=10;fontColor=#555555;dashed=1;dashPattern=8 4;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="L2_corpus" target="L4v_tw">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="480"/>
+              <mxPoint x="1200" y="1460"/>
+              <mxPoint x="155" y="1460"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Resource DB Gen 2 → L4: context encoders -->
+        <mxCell id="e_cross_RES_L4" value="surface analyses&#xa;(context training)" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#1e8449;strokeWidth=2;fontSize=10;fontColor=#1e8449;fontStyle=1;dashed=1;dashPattern=6 3;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="RES_g2" target="L4_ce_box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="905"/>
+              <mxPoint x="940" y="1300"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Resource DB: Word2Vec → L4 context encoders -->
+        <mxCell id="e_cross_W2V_L4" value="Word2Vec weights" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#1e8449;strokeWidth=1.5;fontSize=10;fontColor=#1e8449;dashed=1;dashPattern=6 3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="RES_w2v" target="L4_ce_w2v">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1170" y="795"/>
+              <mxPoint x="1170" y="1280"/>
+              <mxPoint x="908" y="1280"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L3: Converged → L4: TAAC (main training flow) -->
+        <mxCell id="e_cross_L3_L4" value="Yes — converged" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#333333;strokeWidth=2;fontSize=10;fontColor=#333333;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="L3_dec" target="L4v_taac">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="175" y="1265"/>
+              <mxPoint x="15" y="1265"/>
+              <mxPoint x="15" y="1516"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L4: v4 Best Model → L5: Evaluation -->
+        <mxCell id="e_cross_L4_L5" value="v4 best model" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#333333;strokeWidth=2;fontSize=10;fontColor=#333333;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="L4v_best" target="L5_1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1020" y="1895"/>
+              <mxPoint x="150" y="1895"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L4: ablation ID4 → L5: ablation results -->
+        <mxCell id="e_cross_L4_abl_L5" value="ablation metrics" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#9673a6;strokeWidth=1.5;fontSize=10;fontColor=#9673a6;dashed=1;dashPattern=6 3;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="L4_abl4" target="L5_abl_res">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="825" y="1895"/>
+              <mxPoint x="358" y="1895"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L5: Benchmark Report → L6 deliverable -->
+        <mxCell id="e_cross_L5_L6_report" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#333333;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="L5_6" target="L6_3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1045" y="2210"/>
+              <mxPoint x="780" y="2210"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- L2 Corpus → D1 deliverable -->
+        <mxCell id="e_cross_corpus_D1" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#555555;strokeWidth=1.5;dashed=1;dashPattern=8 4;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="L2_corpus" target="L6_1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="595"/>
+              <mxPoint x="1215" y="595"/>
+              <mxPoint x="1215" y="2230"/>
+              <mxPoint x="160" y="2230"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Resource DB → D1b deliverable -->
+        <mxCell id="e_cross_resdb_D1b" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#1e8449;strokeWidth=1.5;dashed=1;dashPattern=8 4;" edge="1" parent="1" source="RES_g2" target="L6_res">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1155" y="760"/>
+              <mxPoint x="1230" y="760"/>
+              <mxPoint x="1230" y="2238"/>
+              <mxPoint x="380" y="2238"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- v4 Model → D2 deliverable -->
+        <mxCell id="e_cross_model_D2" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#555555;strokeWidth=1.5;dashed=1;dashPattern=8 4;" edge="1" parent="1" source="L4v_best" target="L6_2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1245" y="1490"/>
+              <mxPoint x="1245" y="2242"/>
+              <mxPoint x="560" y="2242"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Evaluation → D4 library -->
+        <mxCell id="e_cross_eval_D4" style="edgeStyle=orthogonalEdgeStyle;curved=1;strokeColor=#555555;strokeWidth=1.5;dashed=1;dashPattern=8 4;" edge="1" parent="1" source="L5_4" target="L6_4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="2210"/>
+              <mxPoint x="990" y="2210"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- LEGEND                                                           -->
+        <!-- ================================================================ -->
+        <mxCell id="legend_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="40" width="240" height="240" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend_title" value="Legend" style="text;html=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="45" width="240" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_l1" value="" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1193" y="72" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_l1t" value="Layer 1: Data Pipeline" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="70" width="190" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_l2" value="" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1193" y="95" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_l2t" value="Layer 2: Corpus Construction" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="93" width="190" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_l25" value="" style="rounded=1;fillColor=#d5f5e3;strokeColor=#1e8449;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1193" y="118" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_l25t" value="Layer 2.5: Resource DB (NEW)" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="116" width="190" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_l3" value="" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1193" y="141" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_l3t" value="Layer 3: Active Learning Loop" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="139" width="190" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_l4" value="" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1193" y="164" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_l4t" value="Layer 4: Model Training v4" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="162" width="190" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_l5" value="" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1193" y="187" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_l5t" value="Layer 5: Evaluation" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="185" width="190" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_l6" value="" style="rounded=1;fillColor=#FFF4C8;strokeColor=#D4A800;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1193" y="210" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_l6t" value="Layer 6: Deliverables" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="208" width="190" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_dash" value="" style="endArrow=open;dashed=1;dashPattern=6 3;strokeColor=#555555;strokeWidth=1.5;endFill=0;" edge="1" parent="1">
+          <mxGeometry x="1193" y="238" width="40" height="10" as="geometry">
+            <mxPoint x="1193" y="240" as="sourcePoint"/>
+            <mxPoint x="1233" y="240" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg_dasht" value="Optional / background flow" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="232" width="175" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="leg_solid" value="" style="endArrow=block;strokeColor=#333333;strokeWidth=2;endFill=1;" edge="1" parent="1">
+          <mxGeometry x="1193" y="260" width="40" height="10" as="geometry">
+            <mxPoint x="1193" y="260" as="sourcePoint"/>
+            <mxPoint x="1233" y="260" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg_solidt" value="Main pipeline flow" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="254" width="175" height="18" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

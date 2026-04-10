@@ -1,0 +1,2 @@
+# Default unconstrained decoding (existing behaviour).
+morphotactic_mask: false

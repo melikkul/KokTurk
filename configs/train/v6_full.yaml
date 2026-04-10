@@ -1,0 +1,24 @@
+# v6 full: all Category C interventions combined
+model: contextual_dual_head
+curriculum: taac
+loss:
+  type: focal
+  gamma: 2.0
+  label_smoothing: 0.01
+regularization:
+  rdrop_alpha: 5.0
+  variational_dropout: 0.3
+  weight_dropout: 0.1
+augmentation:
+  keyboard: 0.1
+  diacritic: 0.15
+  stemcorrupt: 0.3
+train:
+  base_lr: 5e-4
+  max_epochs: 50
+  batch_size: 256
+  optimizer: adamw
+  weight_decay: 0.01
+  ema_decay: 0.999
+  early_stop_metric: macro_f1
+  early_stop_patience: 8

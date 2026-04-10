@@ -1,0 +1,20 @@
+# v5 full: focal+label_smooth + cleaned silver + paradigm augmentation +
+# multi-domain + domain-aware curriculum.
+model: contextual_dual_head
+curriculum: domain_aware
+loss:
+  type: focal
+  gamma: 2.0
+  label_smoothing: 0.01  # Cat C: research-optimal for >1K tag vocabs
+data:
+  augment: true
+  augment_ratio: 0.3
+  augment_path: data/gold/synthetic_inflections.jsonl
+  noise_weight_path: data/noise_audit/flagged_tokens.json
+  noise_weight: 0.3
+  corrected_silver_path: data/gold/tr_gold_morph_v1_corrected.jsonl
+  domains: [news, social_media, ecommerce, creative_writing]
+train:
+  base_lr: 5e-4
+  max_epochs: 40
+  batch_size: 256

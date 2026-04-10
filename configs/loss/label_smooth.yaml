@@ -1,0 +1,5 @@
+# Label-smoothing CE config
+# Research: ε=0.1 causes generation collapse on large morph vocabs;
+# ε=0.01 is optimal for morphological seq2seq with >1K tag vocabs.
+loss_fn: label_smooth
+label_smoothing: 0.01

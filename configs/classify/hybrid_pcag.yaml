@@ -1,0 +1,26 @@
+# Hybrid PCAG fusion classifier
+morphological_stream:
+  root_vocab_size: 30000
+  root_dim: 256
+  tag_vocab_size: 60
+  tag_dim: 64
+  bilstm_hidden: 150
+  bilstm_layers: 2
+  textcnn_filters: [2, 3, 4]
+  textcnn_num_filters: 100
+
+contextual_stream:
+  model_name: "dbmdz/bert-base-turkish-cased"
+  freeze: true
+
+fusion:
+  method: "pcag"  # Parameterized Context-Aware Gating
+  projection_dim: 300
+  dropout: 0.3
+
+training:
+  epochs: 30
+  batch_size: 32
+  learning_rate: 0.001
+  cv_folds: 5
+  num_classes: 6

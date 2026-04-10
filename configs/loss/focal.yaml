@@ -1,0 +1,5 @@
+# Focal Loss config (Task 2)
+# Use: train_v4_master.py --loss-fn focal --focal-gamma 2.0 --label-smoothing 0.1
+loss_fn: focal
+focal_gamma: 2.0
+label_smoothing: 0.01  # Cat C: ε=0.1 causes generation collapse on >1K tag vocabs

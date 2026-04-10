@@ -1,0 +1,3 @@
+# Annotation dependencies (Prodigy requires a license)
+-r base.txt
+# prodigy>=1.18.0  # Uncomment when license is available

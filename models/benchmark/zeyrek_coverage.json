@@ -1,0 +1,220 @@
+{
+  "total_tokens": 80582,
+  "gold_in_candidates": 78078,
+  "coverage": 0.9689260628924574,
+  "no_candidates_count": 2,
+  "oov_rate": 2.4819438584299223e-05,
+  "unambiguous_count": 62251,
+  "unambiguous_ratio": 0.7725174356556055,
+  "ambiguous_count": 18329,
+  "avg_candidates": 1.4148445062172694,
+  "candidate_count_distribution": {
+    "0": 2,
+    "1": 62251,
+    "2": 10133,
+    "3": 4663,
+    "4": 1954,
+    "5": 542,
+    "6": 504,
+    "7": 415,
+    "8": 84,
+    "9": 8,
+    "10": 6,
+    "11": 2,
+    "12": 16,
+    "16": 2
+  },
+  "em_floor": 0.7725174356556055,
+  "side_by_side_examples": [
+    {
+      "surface": "karanlıkları",
+      "gold": "karanlık +Noun +PLU +ACC",
+      "candidates": [
+        "Karanlık +Noun +POSS.3PL",
+        "Karanlık +Noun +PLU +ACC",
+        "Karanlık +Noun +PLU +POSS.3SG",
+        "Karanlık +Noun +PLU +POSS.3PL",
+        "karanlık +Noun +POSS.3PL",
+        "karanlık +Noun +PLU +ACC",
+        "karanlık +Noun +PLU +POSS.3SG",
+        "karanlık +Noun +PLU +POSS.3PL",
+        "karanlık +Adj +Noun +POSS.3PL",
+        "karanlık +Adj +Noun +PLU +ACC",
+        "karanlık +Adj +Noun +PLU +POSS.3SG",
+        "karanlık +Adj +Noun +PLU +POSS.3PL",
+        "karmak +Verb +PRESPART +Noun +NESS +Noun +POSS.3PL",
+        "karmak +Verb +PRESPART +Noun +NESS +Noun +PLU +ACC",
+        "karmak +Verb +PRESPART +Noun +NESS +Noun +PLU +POSS.3SG",
+        "karmak +Verb +PRESPART +Noun +NESS +Noun +PLU +POSS.3PL"
+      ],
+      "gold_idx": 5
+    },
+    {
+      "surface": "bir",
+      "gold": "bir +Det",
+      "candidates": [
+        "bir +Adj",
+        "bir +Num",
+        "bir +Adv",
+        "bir +Det"
+      ],
+      "gold_idx": 3
+    },
+    {
+      "surface": "ışık",
+      "gold": "ışık +Noun",
+      "candidates": [
+        "ışık +Noun",
+        "Işık +Noun"
+      ],
+      "gold_idx": 0
+    },
+    {
+      "surface": "seli",
+      "gold": "sel +Noun +ACC",
+      "candidates": [
+        "sel +Noun +ACC",
+        "sel +Noun +POSS.3SG",
+        "se +Noun +WITH +Adj",
+        "Se +Noun +WITH +Adj"
+      ],
+      "gold_idx": 0
+    },
+    {
+      "surface": "Demir",
+      "gold": "demir +Noun",
+      "candidates": [
+        "demir +Adj",
+        "demir +Noun"
+      ],
+      "gold_idx": 1
+    },
+    {
+      "surface": "parmaklıklara",
+      "gold": "parmak +Adj +NESS +Noun +PLU +DAT",
+      "candidates": [
+        "parmaklık +Noun +PLU +DAT",
+        "parmak +Adj +NESS +Noun +PLU +DAT",
+        "parmak +Noun +NESS +Noun +PLU +DAT"
+      ],
+      "gold_idx": 1
+    },
+    {
+      "surface": "yaslanmış",
+      "gold": "yaslamak +Verb +PASS +Verb +NARRPART +Adj",
+      "candidates": [
+        "yaslamak +Verb +PASS +Verb +NARRPART +Adj",
+        "yaslamak +Verb +PASS +Verb +EVID",
+        "yas +Noun +ACQUIRE +Verb +NARRPART +Adj",
+        "yas +Noun +ACQUIRE +Verb +EVID"
+      ],
+      "gold_idx": 0
+    },
+    {
+      "surface": "gene",
+      "gold": "gene +Adv",
+      "candidates": [
+        "gene +Adv",
+        "ge +Noun +POSS.2SG +DAT",
+        "gen +Noun +DAT",
+        "gen +Adj +Noun +DAT"
+      ],
+      "gold_idx": 0
+    },
+    {
+      "surface": "karşıda",
+      "gold": "karşı +Noun +LOC",
+      "candidates": [
+        "karşı +Noun +LOC",
+        "karşı +Adj +Noun +LOC"
+      ],
+      "gold_idx": 0
+    },
+    {
+      "surface": "parka",
+      "gold": "park +Noun +DAT",
+      "candidates": [
+        "park +Noun +DAT",
+        "Park +Noun +DAT",
+        "parka +Noun"
+      ],
+      "gold_idx": 0
+    }
+  ],
+  "mismatch_examples": [
+    {
+      "surface": "yaşanacak",
+      "gold": "Unk",
+      "candidates": [
+        "yaşamak +Verb +PASS +Verb +FUTPART +Adj"
+      ]
+    },
+    {
+      "surface": "bakıyor",
+      "gold": "Unk",
+      "candidates": [
+        "bakmak +Verb +PROG"
+      ]
+    },
+    {
+      "surface": "yürüyüşü",
+      "gold": "Unk",
+      "candidates": [
+        "yürümek +Verb +INF +Noun +ACC",
+        "yürümek +Verb +INF +Noun +POSS.3SG"
+      ]
+    },
+    {
+      "surface": "edeceğim",
+      "gold": "Unk",
+      "candidates": [
+        "etmek +Verb +FUT",
+        "etmek +Verb +FUTPART +Adj +POSS.1SG",
+        "etmek +Verb +FUTPART +Noun +POSS.1SG"
+      ]
+    },
+    {
+      "surface": "verip",
+      "gold": "Unk",
+      "candidates": [
+        "vermek +Verb +AFTERDOINGSO +Adv"
+      ]
+    },
+    {
+      "surface": "bırakacak",
+      "gold": "Unk",
+      "candidates": [
+        "bırakmak +Verb +FUTPART +Adj"
+      ]
+    },
+    {
+      "surface": "duran",
+      "gold": "Unk",
+      "candidates": [
+        "durmak +Verb +PRESPART +Adj"
+      ]
+    },
+    {
+      "surface": "edilebilir",
+      "gold": "Unk",
+      "candidates": [
+        "etmek +Verb +PASS +Verb +Verb +AOR",
+        "etmek +Verb +PASS +Verb +Verb +AORPART +Adj"
+      ]
+    },
+    {
+      "surface": "sevelim",
+      "gold": "Unk",
+      "candidates": [
+        "sevmek +Verb +OPT +1PL"
+      ]
+    },
+    {
+      "surface": "yazıyor",
+      "gold": "Unk",
+      "candidates": [
+        "yazmak +Verb +PROG"
+      ]
+    }
+  ]
+}

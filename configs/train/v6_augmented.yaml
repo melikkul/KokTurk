@@ -1,0 +1,22 @@
+# v6 augmented: v6_rdrop + character-level noise augmentation
+model: contextual_dual_head
+curriculum: taac
+loss:
+  type: focal
+  gamma: 2.0
+  label_smoothing: 0.01
+regularization:
+  rdrop_alpha: 5.0
+  variational_dropout: 0.3
+  weight_dropout: 0.0
+augmentation:
+  keyboard: 0.1
+  diacritic: 0.15
+  stemcorrupt: 0.3
+train:
+  base_lr: 5e-4
+  max_epochs: 40
+  batch_size: 256
+  optimizer: adamw
+  weight_decay: 0.01
+  ema_decay: 0.999

@@ -1,0 +1,15 @@
+# Composite acquisition function: BALD + MAD + CONF
+acquisition:
+  lambda_bald: 0.4
+  lambda_mad: 0.35
+  lambda_conf: 0.25
+  mc_dropout_passes: 20
+  batch_size: 500
+  retrain_every_n: 500
+
+stopping:
+  delta_accuracy_threshold: 0.003
+  kappa_threshold: 0.85
+  wald_p_threshold: 0.05
+  max_human_hours: 180
+  reserve_hours: 20

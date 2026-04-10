@@ -1,0 +1,94 @@
+pairs:
+  - phenomenon: case_acc_dat
+    acceptable: {word: öğrencileri, tags: [+NOUN, +POSS.3SG, +ACC]}
+    unacceptable: {word: öğrencilere, tags: [+NOUN, +POSS.3SG, +DAT]}
+  - phenomenon: case_loc_abl
+    acceptable: {word: evde, tags: [+NOUN, +LOC]}
+    unacceptable: {word: evden, tags: [+NOUN, +ABL]}
+  - phenomenon: case_gen_nom
+    acceptable: {word: evin, tags: [+NOUN, +GEN]}
+    unacceptable: {word: ev, tags: [+NOUN]}
+  - phenomenon: possessive_1sg_3sg
+    acceptable: {word: evim, tags: [+NOUN, +POSS.1SG]}
+    unacceptable: {word: evi, tags: [+NOUN, +POSS.3SG]}
+  - phenomenon: possessive_2sg_2pl
+    acceptable: {word: evin, tags: [+NOUN, +POSS.2SG]}
+    unacceptable: {word: eviniz, tags: [+NOUN, +POSS.2PL]}
+  - phenomenon: possessive_3pl
+    acceptable: {word: evleri, tags: [+NOUN, +POSS.3PL]}
+    unacceptable: {word: evi, tags: [+NOUN, +POSS.3SG]}
+  - phenomenon: number_sg_pl
+    acceptable: {word: ev, tags: [+NOUN]}
+    unacceptable: {word: evler, tags: [+NOUN, +PLU]}
+  - phenomenon: vowel_harmony_back
+    acceptable: {word: arabalar, tags: [+NOUN, +PLU]}
+    unacceptable: {word: arabaler, tags: [INVALID]}
+  - phenomenon: vowel_harmony_front
+    acceptable: {word: evler, tags: [+NOUN, +PLU]}
+    unacceptable: {word: evlar, tags: [INVALID]}
+  - phenomenon: negation_verb
+    acceptable: {word: geldi, tags: [+VERB, +PAST]}
+    unacceptable: {word: gelmedi, tags: [+VERB, +NEG, +PAST]}
+  - phenomenon: tense_past_fut
+    acceptable: {word: geldi, tags: [+VERB, +PAST]}
+    unacceptable: {word: gelecek, tags: [+VERB, +FUT]}
+  - phenomenon: tense_past_prog
+    acceptable: {word: geldi, tags: [+VERB, +PAST]}
+    unacceptable: {word: geliyor, tags: [+VERB, +PROG]}
+  - phenomenon: tense_evid
+    acceptable: {word: gelmiş, tags: [+VERB, +EVID]}
+    unacceptable: {word: geldi, tags: [+VERB, +PAST]}
+  - phenomenon: voice_pass
+    acceptable: {word: yazıldı, tags: [+VERB, +PASS, +PAST]}
+    unacceptable: {word: yazdı, tags: [+VERB, +PAST]}
+  - phenomenon: voice_caus
+    acceptable: {word: yazdırdı, tags: [+VERB, +CAUS, +PAST]}
+    unacceptable: {word: yazdı, tags: [+VERB, +PAST]}
+  - phenomenon: voice_recip
+    acceptable: {word: görüştü, tags: [+VERB, +RECIP, +PAST]}
+    unacceptable: {word: gördü, tags: [+VERB, +PAST]}
+  - phenomenon: voice_refl
+    acceptable: {word: yıkandı, tags: [+VERB, +REFL, +PAST]}
+    unacceptable: {word: yıkadı, tags: [+VERB, +PAST]}
+  - phenomenon: mood_cond
+    acceptable: {word: gelirse, tags: [+VERB, +COND]}
+    unacceptable: {word: gelir, tags: [+VERB, +AOR]}
+  - phenomenon: mood_imp
+    acceptable: {word: gel, tags: [+VERB, +IMP]}
+    unacceptable: {word: geldi, tags: [+VERB, +PAST]}
+  - phenomenon: mood_opt
+    acceptable: {word: geleyim, tags: [+VERB, +OPT]}
+    unacceptable: {word: gelirim, tags: [+VERB, +AOR]}
+  - phenomenon: derivation_adj
+    acceptable: {word: güzelce, tags: [+ADV, +DER]}
+    unacceptable: {word: güzel, tags: [+ADJ]}
+  - phenomenon: derivation_noun
+    acceptable: {word: öğretmen, tags: [+NOUN, +DER]}
+    unacceptable: {word: öğret, tags: [+VERB]}
+  - phenomenon: number_person_1sg_1pl
+    acceptable: {word: geldim, tags: [+VERB, +PAST, +1SG]}
+    unacceptable: {word: geldik, tags: [+VERB, +PAST, +1PL]}
+  - phenomenon: number_person_2sg_3sg
+    acceptable: {word: geldin, tags: [+VERB, +PAST, +2SG]}
+    unacceptable: {word: geldi, tags: [+VERB, +PAST, +3SG]}
+  - phenomenon: case_ins
+    acceptable: {word: evle, tags: [+NOUN, +INS]}
+    unacceptable: {word: evde, tags: [+NOUN, +LOC]}
+  - phenomenon: case_abl
+    acceptable: {word: evden, tags: [+NOUN, +ABL]}
+    unacceptable: {word: eve, tags: [+NOUN, +DAT]}
+  - phenomenon: tense_aor
+    acceptable: {word: gelir, tags: [+VERB, +AOR]}
+    unacceptable: {word: geldi, tags: [+VERB, +PAST]}
+  - phenomenon: poss_stacking
+    acceptable: {word: evimde, tags: [+NOUN, +POSS.1SG, +LOC]}
+    unacceptable: {word: evinde, tags: [+NOUN, +POSS.3SG, +LOC]}
+  - phenomenon: negation_aor
+    acceptable: {word: gelmez, tags: [+VERB, +NEG, +AOR]}
+    unacceptable: {word: gelir, tags: [+VERB, +AOR]}
+  - phenomenon: pass_plus_neg
+    acceptable: {word: yazılmadı, tags: [+VERB, +PASS, +NEG, +PAST]}
+    unacceptable: {word: yazıldı, tags: [+VERB, +PASS, +PAST]}
+  - phenomenon: derivation_caus_pass
+    acceptable: {word: yazdırıldı, tags: [+VERB, +CAUS, +PASS, +PAST]}
+    unacceptable: {word: yazdırdı, tags: [+VERB, +CAUS, +PAST]}

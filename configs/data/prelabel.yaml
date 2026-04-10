@@ -1,0 +1,7 @@
+# Pre-labeling configuration
+backends:
+  - zeyrek
+  - trmorph
+output_dir: "${hydra:runtime.cwd}/data/prelabeled"
+workers: 1
+trmorph_fst_path: "${hydra:runtime.cwd}/tools/trmorph/trmorph.fst"

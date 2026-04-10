@@ -1,0 +1,28 @@
+# GRU Seq2Seq atomizer configuration (Phase 2 draft model)
+model:
+  type: "char_gru"
+  embed_dim: 64
+  hidden_dim: 128
+  num_layers: 2
+  dropout: 0.3
+  max_decode_len: 15
+
+training:
+  epochs: 30
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  grad_clip: 1.0
+  teacher_forcing_start: 0.5
+  teacher_forcing_end: 0.0
+  random_seed: 42
+
+data:
+  gold_path: "data/gold/seed/seed_200_partial.jsonl"
+  weak_labels_path: "data/weak_labels/probabilistic_labels.jsonl"
+  weak_confidence_threshold: 0.90
+  char_vocab_path: "models/vocabs/char_vocab.json"
+  tag_vocab_path: "models/vocabs/tag_vocab.json"
+
+output:
+  model_dir: "models/draft_v1"

@@ -1,0 +1,4 @@
+# Hydra-composed parameters
+# Referenced by dvc.yaml stages
+random_seed: 42
+project_name: "morpho-atomizer"

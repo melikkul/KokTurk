@@ -1,0 +1,12 @@
+{
+  "train_data": "data/splits/train.jsonl",
+  "val_data": "data/splits/val.jsonl",
+  "tag_vocab": "models/vocabs/tag_vocab.json",
+  "berturk_path": "models/berturk",
+  "lr": 0.001,
+  "epochs": 30,
+  "batch_size": 128,
+  "seed": 42,
+  "best_em": 0.9835497835497835,
+  "tag_vocab_size": 7807
+}

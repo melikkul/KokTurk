@@ -1,0 +1,21 @@
+# v6 R-Drop: primary overfitting mitigation for 28-params/token regime
+# Base: v5_conservative + R-Drop α=5, variational dropout, AdamW + WD.
+model: contextual_dual_head
+curriculum: taac
+loss:
+  type: focal
+  gamma: 2.0
+  label_smoothing: 0.01
+regularization:
+  rdrop_alpha: 5.0
+  variational_dropout: 0.3
+  weight_dropout: 0.0
+train:
+  base_lr: 5e-4
+  max_epochs: 40
+  batch_size: 256
+  optimizer: adamw
+  weight_decay: 0.01
+  ema_decay: 0.999
+  early_stop_metric: val_loss
+  early_stop_patience: 5

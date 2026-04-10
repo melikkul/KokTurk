@@ -1,0 +1,13 @@
+[project]
+name = "kokturk"
+version = "0.1.0"
+description = "kök-türk: Turkish Morphological Atomizer — decompose words into linguistic atoms"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+keywords = ["turkish", "morphology", "nlp", "tokenization", "agglutinative"]
+dependencies = ["zeyrek>=0.1.2"]
+
+[project.optional-dependencies]
+neural = ["torch>=2.0.0"]
+berturk = ["transformers>=4.30.0"]

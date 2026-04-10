@@ -1,0 +1,30 @@
+# Char-level Transformer atomizer configuration
+model:
+  type: "char_transformer"
+  num_layers: 6
+  d_model: 128
+  num_heads: 4
+  d_ff: 512
+  dropout: 0.1
+  max_word_length: 64
+
+training:
+  epochs: 20
+  batch_size: 128
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  warmup_steps: 1000
+  grad_clip: 1.0
+  focal_loss_gamma: 2.0
+  pos_loss_weight_phase1: 0.5
+  pos_loss_weight_phase23: 0.2
+
+curriculum:
+  phase1_epochs: 5    # Unambiguous only, cross-attention frozen
+  phase2_epochs: 5    # 50/50 mix, unfreeze cross-attention
+  phase3_epochs: 10   # Hard-mine ambiguous subset
+
+data:
+  train_path: "${hydra:runtime.cwd}/data/splits/train.jsonl"
+  val_path: "${hydra:runtime.cwd}/data/splits/val.jsonl"
+  test_path: "${hydra:runtime.cwd}/data/splits/test.jsonl"

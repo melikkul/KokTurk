@@ -1,0 +1,372 @@
+{
+    "version": "1.0",
+    "description": "Golden test set for morphological analyzer regression testing",
+    "created": "2026-04-09",
+    "note": "Tags are canonical format from Zeyrek backend. Each entry tests that at least one analysis matches the expected root and contains the expected tags.",
+    "entries": [
+        {
+            "id": "gold_001",
+            "surface": "evlerinden",
+            "expected_root": "ev",
+            "expected_tags": ["+Noun", "+PLU", "+POSS.3SG", "+ABL"],
+            "category": "nominal_deep_chain"
+        },
+        {
+            "id": "gold_002",
+            "surface": "gidiyorum",
+            "expected_root": "gitmek",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        },
+        {
+            "id": "gold_003",
+            "surface": "yapılmış",
+            "expected_root": "yapmak",
+            "expected_tags": ["+Verb", "+PASS", "+Verb", "+EVID"],
+            "category": "verbal_passive_evidential"
+        },
+        {
+            "id": "gold_004",
+            "surface": "kitabı",
+            "expected_root": "kitap",
+            "expected_tags": ["+Noun", "+ACC"],
+            "category": "nominal_accusative"
+        },
+        {
+            "id": "gold_005",
+            "surface": "çocuklar",
+            "expected_root": "çocuk",
+            "expected_tags": ["+Noun", "+PLU"],
+            "category": "nominal_plural"
+        },
+        {
+            "id": "gold_006",
+            "surface": "okudum",
+            "expected_root": "okumak",
+            "expected_tags": ["+Verb", "+PAST"],
+            "category": "verbal_past"
+        },
+        {
+            "id": "gold_007",
+            "surface": "güzel",
+            "expected_root": "güzel",
+            "expected_tags": ["+Adj"],
+            "category": "adjective_bare"
+        },
+        {
+            "id": "gold_008",
+            "surface": "yüz",
+            "expected_root": "yüz",
+            "expected_tags": ["+Num"],
+            "category": "ambiguous_numeral"
+        },
+        {
+            "id": "gold_009",
+            "surface": "yazar",
+            "expected_root": "yazmak",
+            "expected_tags": ["+Verb", "+AOR"],
+            "category": "ambiguous_aorist"
+        },
+        {
+            "id": "gold_010",
+            "surface": "alan",
+            "expected_root": "alan",
+            "expected_tags": ["+Noun"],
+            "category": "ambiguous_noun_participle"
+        },
+        {
+            "id": "gold_011",
+            "surface": "koşuyor",
+            "expected_root": "koşmak",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        },
+        {
+            "id": "gold_012",
+            "surface": "gelmeli",
+            "expected_root": "gelmek",
+            "expected_tags": ["+Verb", "+NECES"],
+            "category": "verbal_necessitative"
+        },
+        {
+            "id": "gold_013",
+            "surface": "aldım",
+            "expected_root": "almak",
+            "expected_tags": ["+Verb", "+PAST"],
+            "category": "verbal_past"
+        },
+        {
+            "id": "gold_014",
+            "surface": "yazıyor",
+            "expected_root": "yazmak",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        },
+        {
+            "id": "gold_015",
+            "surface": "büyük",
+            "expected_root": "büyük",
+            "expected_tags": ["+Adj"],
+            "category": "adjective_bare"
+        },
+        {
+            "id": "gold_016",
+            "surface": "gözlük",
+            "expected_root": "gözlük",
+            "expected_tags": ["+Noun"],
+            "category": "nominal_derived"
+        },
+        {
+            "id": "gold_017",
+            "surface": "başladı",
+            "expected_root": "başlamak",
+            "expected_tags": ["+Verb", "+PAST"],
+            "category": "verbal_past"
+        },
+        {
+            "id": "gold_018",
+            "surface": "okullarında",
+            "expected_root": "okul",
+            "expected_tags": ["+Noun", "+PLU", "+POSS.2SG", "+LOC"],
+            "category": "nominal_deep_chain"
+        },
+        {
+            "id": "gold_019",
+            "surface": "gelmeyecek",
+            "expected_root": "gelmek",
+            "expected_tags": ["+Verb", "+NEG", "+FUT"],
+            "category": "verbal_negative_future"
+        },
+        {
+            "id": "gold_020",
+            "surface": "gördüm",
+            "expected_root": "görmek",
+            "expected_tags": ["+Verb", "+PAST"],
+            "category": "verbal_past"
+        },
+        {
+            "id": "gold_021",
+            "surface": "gelmiş",
+            "expected_root": "gelmek",
+            "expected_tags": ["+Verb", "+NARRPART", "+Adj"],
+            "category": "verbal_participle"
+        },
+        {
+            "id": "gold_022",
+            "surface": "yazmıştım",
+            "expected_root": "yazmak",
+            "expected_tags": ["+Verb", "+EVID", "+PAST"],
+            "category": "verbal_pluperfect"
+        },
+        {
+            "id": "gold_023",
+            "surface": "okunur",
+            "expected_root": "okumak",
+            "expected_tags": ["+Verb", "+PASS", "+Verb", "+AOR"],
+            "category": "verbal_passive_aorist"
+        },
+        {
+            "id": "gold_024",
+            "surface": "düşünüyorum",
+            "expected_root": "düşünmek",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        },
+        {
+            "id": "gold_025",
+            "surface": "anlamadım",
+            "expected_root": "anlamak",
+            "expected_tags": ["+Verb", "+NEG", "+PAST"],
+            "category": "verbal_negative_past"
+        },
+        {
+            "id": "gold_026",
+            "surface": "seviyorum",
+            "expected_root": "sevmek",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        },
+        {
+            "id": "gold_027",
+            "surface": "bakıyoruz",
+            "expected_root": "bakmak",
+            "expected_tags": ["+Verb", "+PROG", "+1PL"],
+            "category": "verbal_progressive_person"
+        },
+        {
+            "id": "gold_028",
+            "surface": "yapacağız",
+            "expected_root": "yapmak",
+            "expected_tags": ["+Verb", "+FUT", "+1PL"],
+            "category": "verbal_future_person"
+        },
+        {
+            "id": "gold_029",
+            "surface": "gidecekler",
+            "expected_root": "gitmek",
+            "expected_tags": ["+Verb", "+FUT", "+PLU"],
+            "category": "verbal_future_plural"
+        },
+        {
+            "id": "gold_030",
+            "surface": "gelmediler",
+            "expected_root": "gelmek",
+            "expected_tags": ["+Verb", "+NEG", "+PAST", "+PLU"],
+            "category": "verbal_negative_past_plural"
+        },
+        {
+            "id": "gold_031",
+            "surface": "öğretmen",
+            "expected_root": "öğretmen",
+            "expected_tags": ["+Noun"],
+            "category": "nominal_bare"
+        },
+        {
+            "id": "gold_032",
+            "surface": "öğretmenler",
+            "expected_root": "öğretmen",
+            "expected_tags": ["+Noun", "+PLU"],
+            "category": "nominal_plural"
+        },
+        {
+            "id": "gold_033",
+            "surface": "arkadaşım",
+            "expected_root": "arkadaş",
+            "expected_tags": ["+Noun", "+POSS.1SG"],
+            "category": "nominal_possessive"
+        },
+        {
+            "id": "gold_034",
+            "surface": "insanlar",
+            "expected_root": "insan",
+            "expected_tags": ["+Noun", "+PLU"],
+            "category": "nominal_plural"
+        },
+        {
+            "id": "gold_035",
+            "surface": "güzellik",
+            "expected_root": "güzel",
+            "expected_tags": ["+Adj", "+NESS", "+Noun"],
+            "category": "derivation_adj_to_noun"
+        },
+        {
+            "id": "gold_036",
+            "surface": "anlatıyor",
+            "expected_root": "anlatmak",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        },
+        {
+            "id": "gold_037",
+            "surface": "söylüyor",
+            "expected_root": "söylemek",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        },
+        {
+            "id": "gold_038",
+            "surface": "gelecek",
+            "expected_root": "gelecek",
+            "expected_tags": ["+Noun"],
+            "category": "ambiguous_future_noun"
+        },
+        {
+            "id": "gold_039",
+            "surface": "okuyacak",
+            "expected_root": "okumak",
+            "expected_tags": ["+Verb", "+FUTPART", "+Adj"],
+            "category": "verbal_future_participle"
+        },
+        {
+            "id": "gold_040",
+            "surface": "küçük",
+            "expected_root": "küçük",
+            "expected_tags": ["+Adj"],
+            "category": "adjective_bare"
+        },
+        {
+            "id": "gold_041",
+            "surface": "okul",
+            "expected_root": "okul",
+            "expected_tags": ["+Noun"],
+            "category": "nominal_bare"
+        },
+        {
+            "id": "gold_042",
+            "surface": "ev",
+            "expected_root": "ev",
+            "expected_tags": ["+Noun"],
+            "category": "nominal_bare"
+        },
+        {
+            "id": "gold_043",
+            "surface": "su",
+            "expected_root": "su",
+            "expected_tags": ["+Noun"],
+            "category": "nominal_bare"
+        },
+        {
+            "id": "gold_044",
+            "surface": "gel",
+            "expected_root": "gelmek",
+            "expected_tags": ["+Verb", "+IMP"],
+            "category": "verbal_imperative"
+        },
+        {
+            "id": "gold_045",
+            "surface": "iyi",
+            "expected_root": "iyi",
+            "expected_tags": ["+Adj"],
+            "category": "adjective_bare"
+        },
+        {
+            "id": "gold_046",
+            "surface": "kitapları",
+            "expected_root": "kitap",
+            "expected_tags": ["+Noun", "+PLU", "+ACC"],
+            "category": "nominal_plural_accusative"
+        },
+        {
+            "id": "gold_047",
+            "surface": "gelmek",
+            "expected_root": "gelmek",
+            "expected_tags": ["+Verb", "+INF", "+Noun"],
+            "category": "verbal_infinitive"
+        },
+        {
+            "id": "gold_048",
+            "surface": "yazılacak",
+            "expected_root": "yazmak",
+            "expected_tags": ["+Verb", "+PASS", "+Verb", "+FUTPART", "+Adj"],
+            "category": "verbal_passive_future_participle"
+        },
+        {
+            "id": "gold_049",
+            "surface": "bilgi",
+            "expected_root": "bilgi",
+            "expected_tags": ["+Noun"],
+            "category": "nominal_bare"
+        },
+        {
+            "id": "gold_050",
+            "surface": "gözleri",
+            "expected_root": "göz",
+            "expected_tags": ["+Noun", "+PLU", "+ACC"],
+            "category": "nominal_plural_accusative"
+        },
+        {
+            "id": "gold_051",
+            "surface": "ağaçlar",
+            "expected_root": "ağaç",
+            "expected_tags": ["+Noun", "+PLU"],
+            "category": "nominal_plural"
+        },
+        {
+            "id": "gold_052",
+            "surface": "çalışıyor",
+            "expected_root": "çalışmak",
+            "expected_tags": ["+Verb", "+PROG"],
+            "category": "verbal_progressive"
+        }
+    ]
+}

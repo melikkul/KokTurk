@@ -1,0 +1,5 @@
+# Symmetric Cross Entropy config (Task 2)
+# Use: train_v4_master.py --loss-fn sce --sce-alpha 1.0 --sce-beta 0.4
+loss_fn: sce
+sce_alpha: 1.0
+sce_beta: 0.4

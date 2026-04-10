@@ -1,0 +1,20 @@
+# TextCNN classifier configuration
+model:
+  embedding_dim: 256
+  filter_sizes: [2, 3, 4]
+  num_filters: 100
+  dropout: 0.5
+  num_classes: 6  # TTC-3600 categories
+
+embedding:
+  root_vocab_size: 30000
+  root_dim: 256
+  tag_vocab_size: 60
+  tag_dim: 64
+
+training:
+  epochs: 30
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  cv_folds: 5

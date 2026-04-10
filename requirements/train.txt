@@ -1,0 +1,5 @@
+# Training extras
+-r base.txt
+wandb>=0.16.0
+datasets>=2.19.0
+gensim>=4.3.0

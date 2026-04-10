@@ -1,0 +1,19 @@
+# Template filled by src/train/hpo.py after the HPO campaign completes.
+# TO BE FILLED BY HPO RESULTS (see models/hpo/best_params.json)
+model: single_seq2seq
+loss:
+  type: ce  # or focal / label_smooth — filled from best_params["loss_fn"]
+  label_smoothing: 0.01
+regularization:
+  rdrop_alpha: 0.0  # filled from best_params["rdrop_alpha"]
+  variational_dropout: 0.0  # filled from best_params["variational_dropout"]
+train:
+  # filled from best_params
+  embed_dim: null
+  hidden_dim: null
+  num_layers: null
+  base_lr: null
+  dropout: null
+  batch_size: null
+  optimizer: adamw
+  weight_decay: null

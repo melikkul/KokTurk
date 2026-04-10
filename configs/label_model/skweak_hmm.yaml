@@ -1,0 +1,7 @@
+# skweak HMM label model configuration
+# Using HMM (NOT vanilla Snorkel) because Turkish morphology is sequential
+model_type: "hmm"
+num_labeling_functions: 6
+entropy_threshold: 0.5
+min_confidence: 0.6
+output_dir: "${hydra:runtime.cwd}/data/weak_labels"

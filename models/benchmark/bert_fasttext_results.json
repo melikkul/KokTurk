@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "dataset": "TTC-3600",
+    "n_docs": 3600,
+    "n_classes": 6,
+    "label_names": [
+      "economy",
+      "culture_art",
+      "health",
+      "politics",
+      "sports",
+      "technology"
+    ],
+    "cv_folds": 5,
+    "random_state": 42
+  },
+  "raw_tfidf_logreg": {
+    "f1": 0.9357543407830414,
+    "std": 0.007354710785541487,
+    "accuracy": 0.9361111111111111
+  },
+  "atomized_tfidf_logreg": {
+    "f1": 0.9386001177932617,
+    "std": 0.010044757717631254,
+    "accuracy": 0.9388888888888889
+  },
+  "berturk_cls_logreg": {
+    "f1": 0.9449499380437605,
+    "std": 0.007984902103588928,
+    "accuracy": 0.945
+  },
+  "berturk_cls_svm": {
+    "f1": 0.9448986316394367,
+    "std": 0.009737515564170188,
+    "accuracy": 0.945
+  },
+  "hybrid_atom_bert": {
+    "f1": 0.9466141499265911,
+    "std": 0.009177011575549553,
+    "accuracy": 0.9466666666666667
+  },
+  "fasttext_supervised": {
+    "f1": 0.7782361511470791,
+    "std": 0.17941779226079688,
+    "accuracy": 0.7955555555555556
+  },
+  "fasttext_emb_logreg": {
+    "f1": 0.9337173803266797,
+    "std": 0.005852016813463252,
+    "accuracy": 0.9338888888888889
+  },
+  "hybrid_atom_ft": {
+    "f1": 0.9407425761219097,
+    "std": 0.004226471767738477,
+    "accuracy": 0.9408333333333333
+  }
+}

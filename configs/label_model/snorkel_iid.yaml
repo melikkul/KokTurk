@@ -1,0 +1,5 @@
+# Snorkel i.i.d. label model (baseline comparison only)
+# WARNING: Snorkel assumes i.i.d. — inappropriate for sequential Turkish morphology
+model_type: "snorkel_iid"
+num_labeling_functions: 6
+output_dir: "${hydra:runtime.cwd}/data/weak_labels"

@@ -1,0 +1,5 @@
+# Constrained decoding configuration (Cat B Task 3).
+# Applies the morphotactic FSA mask to the GRU decoder logits at each
+# timestep, blocking illegal suffix orderings (e.g. case-after-case,
+# inflectional-before-derivational).
+morphotactic_mask: true

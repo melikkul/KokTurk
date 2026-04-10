@@ -1,0 +1,6 @@
+# Data ingestion configuration
+raw_dir: "${hydra:runtime.cwd}/data/raw"
+processed_dir: "${hydra:runtime.cwd}/data/processed"
+min_sentence_length: 3
+max_sentence_length: 200
+encoding: "utf-8"

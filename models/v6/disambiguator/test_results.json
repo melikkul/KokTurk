@@ -1,0 +1,17 @@
+{
+  "test": {
+    "overall_em": 0.9821,
+    "ambiguous_em": 0.9334,
+    "total_tokens": 7144,
+    "ambiguous_tokens": 1921
+  },
+  "val": {
+    "overall_em": 0.9835,
+    "ambiguous_em": 0.9403,
+    "total_tokens": 6930,
+    "ambiguous_tokens": 1909
+  },
+  "model": "v6_disambiguator",
+  "best_epoch": 17,
+  "trainable_params": 1043905
+}

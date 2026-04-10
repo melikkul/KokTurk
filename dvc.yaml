@@ -1,0 +1,53 @@
+# DVC pipeline definition for morpho-atomizer
+# Run: dvc repro (reproduces all stages)
+
+stages:
+  ingest:
+    cmd: PYTHONPATH=src python src/data/ingest.py
+    deps:
+      - src/data/ingest.py
+      - data/external/boun_treebank/
+    outs:
+      - data/processed/corpus.jsonl
+
+  prelabel:
+    cmd: PYTHONPATH=src python src/data/prelabel.py
+    deps:
+      - src/data/prelabel.py
+      - src/morpho_tr/core/analyzer.py
+      - data/processed/corpus.jsonl
+    outs:
+      - data/prelabeled/candidates.jsonl
+
+  label_model:
+    cmd: PYTHONPATH=src python src/data/label_model.py
+    deps:
+      - src/data/label_model.py
+      - src/data/labeling_functions.py
+      - data/prelabeled/candidates.jsonl
+      - data/processed/corpus.jsonl
+    outs:
+      - data/weak_labels/probabilistic_labels.jsonl
+
+  create_seed:
+    cmd: PYTHONPATH=src python src/data/create_seed.py
+    deps:
+      - src/data/create_seed.py
+      - data/processed/corpus.jsonl
+      - data/prelabeled/candidates.jsonl
+      - data/weak_labels/probabilistic_labels.jsonl
+    outs:
+      - data/gold/seed/seed_200.jsonl
+
+  # Training stage — run on GPU cluster, not dvc repro
+  # train:
+  #   cmd: PYTHONPATH=src python src/train/train_atomizer.py
+  #   deps:
+  #     - src/train/train_atomizer.py
+  #     - data/gold/combined_gold.jsonl
+  #     - data/weak_labels/probabilistic_labels.jsonl
+  #     - models/vocabs/
+  #   outs:
+  #     - models/draft_v1/best_model.pt
+  #   params:
+  #     - configs/train/atomizer_gru.yaml

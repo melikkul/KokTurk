@@ -1,0 +1,27 @@
+# Colorblind-safe visualization defaults
+# Based on Okabe-Ito palette (CVD-friendly)
+# Reference: https://jfly.uni-koeln.de/color/
+
+palette:
+  categorical:
+    - "#E69F00"  # orange
+    - "#56B4E9"  # sky blue
+    - "#009E73"  # bluish green
+    - "#F0E442"  # yellow
+    - "#0072B2"  # blue
+    - "#D55E00"  # vermilion
+    - "#CC79A7"  # reddish purple
+    - "#000000"  # black
+
+  sequential: "viridis"   # perceptually uniform
+  diverging: "coolwarm"   # blue-to-red (CVD-safe)
+
+markers:
+  # Always use distinct markers alongside color
+  default: ["o", "s", "^", "D", "v", "<", ">", "p"]
+
+guidelines:
+  - "Never use color alone to convey information"
+  - "Always include marker shapes or line styles as secondary indicator"
+  - "Use Viridis for continuous data (perceptually uniform in grayscale)"
+  - "Avoid red-green palettes (deuteranopia affects ~8% of males)"

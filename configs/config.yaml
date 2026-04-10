@@ -1,0 +1,12 @@
+# Hydra root configuration for morpho-atomizer
+defaults:
+  - data: ingest
+  - label_model: skweak_hmm
+  - train: atomizer_charT
+  - acquire: bald_mad
+  - classify: textcnn
+  - benchmark: full_eval
+
+random_seed: 42
+project_name: "morpho-atomizer"
+output_dir: "${hydra:runtime.cwd}/outputs"

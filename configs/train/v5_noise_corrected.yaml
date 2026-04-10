@@ -1,0 +1,20 @@
+# PREREQ: Run 'make noise-audit' or submit_noise_audit.sh to produce
+# flagged_tokens.json before training with this config.
+#
+# v5 noise-corrected: ISOLATES the data-cleaning improvement.
+# Standard CE loss + heuristic-corrected silver + flagged-token downweighting.
+model: single_seq2seq
+curriculum: taac
+loss:
+  type: ce
+  label_smoothing: 0.0
+data:
+  augment: false
+  noise_weight_path: data/noise_audit/flagged_tokens.json
+  noise_weight: 0.3
+  corrected_silver_path: data/gold/tr_gold_morph_v1_corrected.jsonl
+  domains: [news]
+train:
+  base_lr: 5e-4
+  max_epochs: 30
+  batch_size: 256
