@@ -15,6 +15,7 @@ __version__ = "0.1.0"
 
 from kokturk.core.analyzer import MorphoAnalyzer
 from kokturk.core.datatypes import Morpheme, MorphologicalAnalysis, TokenAnalyses
+from kokturk.core.grammar import GrammarChecker
 
 __all__ = [
     "MorphoAnalyzer",
@@ -22,6 +23,7 @@ __all__ = [
     "Morpheme",
     "TokenAnalyses",
     "Atomizer",
+    "GrammarChecker",
 ]
 
 
