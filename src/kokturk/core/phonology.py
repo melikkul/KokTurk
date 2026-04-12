@@ -11,6 +11,17 @@ e.g., -da/-de/-ta/-te → +LOC
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True, slots=True)
+class HarmonyResult:
+    """Result of a vowel harmony check."""
+
+    ok: bool
+    severity: str  # "none" | "warning" | "error"
+
+
 FRONT_VOWELS = frozenset("eiöü")
 BACK_VOWELS = frozenset("aıou")
 ALL_VOWELS = FRONT_VOWELS | BACK_VOWELS
@@ -94,3 +105,38 @@ def is_rounded(word: str) -> bool:
     """
     v = last_vowel(word)
     return v is not None and v in (FRONT_ROUNDED | BACK_ROUNDED)
+
+
+def check_vowel_harmony(word: str) -> HarmonyResult:
+    """Check 4-way Turkish vowel harmony.  Returns severity level.
+
+    Two-way (front/back) violation is almost never valid in native Turkish
+    words and is reported as ``"error"``.  Four-way (rounded/unrounded)
+    violations occur in loanwords and are reported as ``"warning"``.
+
+    Args:
+        word: A Turkish word.
+
+    Returns:
+        ``HarmonyResult(ok, severity)`` where *severity* is one of
+        ``"none"`` (harmony holds), ``"warning"`` (4-way only violation),
+        or ``"error"`` (2-way front/back violation).
+    """
+    vowels = [ch for ch in word.lower() if ch in ALL_VOWELS]
+    if len(vowels) <= 1:
+        return HarmonyResult(ok=True, severity="none")
+
+    # 2-way check: all vowels must share the same front/back class
+    first_front = vowels[0] in FRONT_VOWELS
+    for v in vowels[1:]:
+        if (v in FRONT_VOWELS) != first_front:
+            return HarmonyResult(ok=False, severity="error")
+
+    # 4-way check: rounded/unrounded consistency
+    rounded_set = FRONT_ROUNDED | BACK_ROUNDED
+    first_rounded = vowels[0] in rounded_set
+    for v in vowels[1:]:
+        if (v in rounded_set) != first_rounded:
+            return HarmonyResult(ok=False, severity="warning")
+
+    return HarmonyResult(ok=True, severity="none")
