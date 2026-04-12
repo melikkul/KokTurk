@@ -1,112 +1,109 @@
-# kok-turk
+# kök-türk 🌳
 
-**Turkish Morphological Atomizer** -- Decompose Turkish words into linguistic atoms (root + ordered suffix tags) using neural disambiguation.
+**Turkish Morphological Atomizer** — Decompose Turkish words into their linguistic atoms using neural disambiguation. SOTA-competitive accuracy with minimal compute.
 
 ```python
 from kokturk import MorphoAnalyzer
 
 analyzer = MorphoAnalyzer(backends=["disambiguator"])
-results = analyzer.analyze_sentence("Cocuklar evlerinden cikti")
-# -> ["cocuk +PLU", "ev +PLU +POSS.3SG +ABL", "cik +PAST +3SG"]
+results = analyzer.analyze_sentence("Çocuklar evlerinden çıktı")
+# → ["çocuk +PLU", "ev +PLU +POSS.3SG +ABL", "çık +PAST +3SG"]
 ```
 
-## Why kok-turk?
+## Highlights
 
-Turkish is agglutinative -- a single word can pack 5+ morphemes. BPE/WordPiece splits these at arbitrary positions, destroying morphological structure. kok-turk splits at **morpheme boundaries** with **98.3% accuracy**.
+| | |
+|---|---|
+| 🎯 **98.3% Exact Match** | SOTA-competitive morphological disambiguation |
+| ⚡ **14 min CPU training** | No GPU required — frozen BERTurk + 1M param reranker |
+| 📚 **2.5M entry resource** | Largest Turkish morphological database |
+| 🔬 **94.7% F1 classification** | Hybrid atomization beats BERTurk-only on TTC-3600 |
 
-| Input | BPE (BERTurk) | kok-turk |
+## How It Works
+
+kök-türk replaces statistical subword splitting (BPE/WordPiece) with linguistically motivated morpheme decomposition:
+
+| Input | BPE (BERTurk) | kök-türk |
 |-------|---------------|----------|
 | evlerinden | ev ##ler ##inden | ev +PLU +POSS.3SG +ABL |
 | gidiyordum | gidi ##yor ##dum | git +PROG +PAST +1SG |
-| kitapcilardan | kitap ##ci ##lar ##dan | kitap +AGT +PLU +ABL |
+| kitapçılardan | kitap ##çı ##lar ##dan | kitap +AGT +PLU +ABL |
 
-## Key Results
+The system operates in two modes:
 
-| Task | Metric | Score |
-|------|--------|-------|
-| **Morphological Disambiguation** | **Test Exact Match** | **98.3%** |
-| Morphological Disambiguation | Ambiguous-only EM | 93.8% |
-| Morphological Generation | Test Exact Match | 84.7% |
-| Text Classification (TTC-3600) | Macro-F1 (Hybrid) | 94.7% |
-| Text Classification (TTC-3600) | Macro-F1 (Atomized TF-IDF) | 93.9% |
+**Disambiguation** (primary) — Given a sentence, generate morphological candidates via Zeyrek, then select the best parse using BERTurk sentence context. This is how SOTA systems work.
 
-## SOTA Comparison
+**Generation** (fallback) — For out-of-vocabulary words, a Dual-Head Decoder generates the parse character-by-character without requiring sentence context.
 
-| System | EM | Type | Note |
-|--------|-----|------|------|
-| MorseDisamb (Seker & Eryigit 2017) | 98.59% | Disambiguator | Published SOTA |
-| **kok-turk v6 (ours)** | **98.3%** | **Disambiguator** | **1M params, 14 min CPU** |
-| TransMorph (Akyurek et al. 2022) | 96.25% | Transformer | Disambiguation |
-| SIGMORPHON baseline (2019) | 92.27% | Seq2seq | Generation |
-| kok-turk v5.2 (ours, generation) | 84.7% | Dual-Head Decoder | Context-free generation |
-| Yildiz et al. 2016 | 84.12% | Analysis from scratch | Comparable to generation |
+## Performance
 
-SOTA-competitive performance (0.3pp gap) achieved with **1M trainable parameters** and **14 minutes CPU training** -- no GPU required.
+### Morphological Analysis
 
-## Novel Contributions
+| System | Exact Match | Type |
+|--------|------------|------|
+| MorseDisamb (Şeker & Eryiğit 2017) | 98.59% | Published SOTA |
+| **kök-türk** | **98.3%** | **Disambiguation** |
+| TransMorph (Akyürek et al. 2022) | 96.25% | Disambiguation |
+| SIGMORPHON baseline (2019) | 92.27% | Generation |
+| Yıldız et al. 2016 | 84.12% | Generation |
 
-1. **BERTurk Disambiguation** -- Frozen BERTurk sentence embeddings + lightweight candidate reranker (~1M params). Selects from Zeyrek's morphological candidates using sentence context. Achieves 98.3% EM -- within 0.3pp of published SOTA.
+### Text Classification (TTC-3600, 5-fold CV)
 
-2. **Dual-Head Decoder** -- Root classification (single-step) + conditional tag generation (seq2seq). Eliminates autoregressive root-error propagation. Achieves 84.7% EM without any pretrained model or sentence context.
+| Method | Macro-F1 |
+|--------|----------|
+| Atomized TF-IDF + BERTurk (hybrid) | 0.947 ± 0.009 |
+| BERTurk [CLS] + LogReg | 0.945 ± 0.008 |
+| BERTurk [CLS] + SVM | 0.945 ± 0.010 |
+| Atomized TF-IDF + FastText (hybrid) | 0.941 ± 0.004 |
+| Atomized TF-IDF + LogReg | 0.939 ± 0.010 |
+| Raw TF-IDF + LogReg | 0.936 ± 0.007 |
+| FastText embeddings + LogReg | 0.934 ± 0.006 |
 
-3. **MIS Metric** (Morphological Informativeness Score) -- Token-level metric measuring atomization benefit: `MIS(x) = a*H_morph + b*D_canon + c*C_struct`. First metric to quantify per-token benefit of morphological vs statistical tokenization.
+All differences tested via paired bootstrap (10K iterations, Holm-Bonferroni corrected).
 
-4. **TAAC** (Tier-Aware Adaptive Curriculum) -- Automatic phase transitions between data quality tiers based on validation loss plateau detection. Component-aware variant monitors root and tag heads independently.
+### Efficiency
+
+| Component | Training | Size | Params |
+|-----------|---------|------|--------|
+| Disambiguator | 14 min CPU | ~4 MB | 1M trainable |
+| Dual-Head Decoder | 2 hours CPU | ~20 MB | 5.2M |
+| BERTurk (frozen) | — | ~440 MB | 110M (no gradient) |
 
 ## Architecture
 
-### Disambiguation Model (98.3% EM -- Primary)
-
 ```
-Input: "Cocuklar evlerinden cikti" (sentence)
-                    |
-    +---------------+---------------+
-    |               |               |
-"Cocuklar"    "evlerinden"       "cikti"
-    |               |               |
-  Zeyrek          Zeyrek          Zeyrek
-  1 candidate     3 candidates    2 candidates
-    |               |               |
-    |         BERTurk context       |
-    |          (frozen, 768d)       |
-    |               |               |
-    |         Score each candidate  |
-    |          via reranker MLP     |
-    |               |               |
-    |          Select best          |
-    |               |               |
- "cocuk +PLU"  "ev +PLU +POSS.3SG +ABL"  "cik +PAST +3SG"
-```
-
-### Generation Model (84.7% EM -- Fallback for OOV)
-
-```
-Input: "evlerinden" (single word, no context)
-         |
-    Character BiGRU Encoder
-         |
-    +----+----------------------+
-    |                            |
-  Root Head                  Tag Decoder
-  (classification)    (conditional seq2seq)
-  "ev" (1 step)       +PLU +POSS.3SG +ABL
-    |                            |
-    +------------+---------------+
-                 |
-    Output: "ev +PLU +POSS.3SG +ABL"
+Sentence: "Çocuklar evlerinden çıktı"
+                    │
+     ┌──────────────┼──────────────┐
+     │              │              │
+ "Çocuklar"   "evlerinden"     "çıktı"
+     │              │              │
+   Zeyrek         Zeyrek         Zeyrek
+   1 candidate    3 candidates   2 candidates
+     │              │              │
+     │        ┌─────┴─────┐       │
+     │        │ BERTurk   │       │
+     │        │ (frozen)  │       │
+     │        │ 768-dim   │       │
+     │        └─────┬─────┘       │
+     │              │              │
+     │        Score + Select       │
+     │              │              │
+ "çocuk +PLU"  "ev +PLU           "çık +PAST
+               +POSS.3SG           +3SG"
+               +ABL"
 ```
 
-## TR-Gold-Morph Resource
+## TR-Gold-Morph
 
-The largest Turkish morphological resource: **2.5M entries** with confidence tiers, morpheme boundaries, and multi-schema export.
+The largest Turkish morphological resource:
 
-| | TR-Gold-Morph (ours) | UniMorph Turkish | BOUN Treebank |
-|--|---------------------|-----------------|---------------|
+| | kök-türk | UniMorph Turkish | BOUN Treebank |
+|--|---------|-----------------|---------------|
 | Entries | **2,512,034** | 275,460 | ~121,000 |
-| Confidence tiers | gold/silver/bronze | -- | -- |
-| Morpheme boundaries | 95.6% | -- | -- |
-| Frequency data | yes | -- | -- |
-| Export formats | Canonical + UD + UniMorph | UniMorph only | UD only |
+| Confidence tiers | gold / silver / bronze | — | — |
+| Morpheme boundaries | 95.6% | — | — |
+| Export formats | Canonical + UD + UniMorph | UniMorph | UD |
 
 ## Installation
 
@@ -114,7 +111,7 @@ The largest Turkish morphological resource: **2.5M entries** with confidence tie
 pip install kokturk
 ```
 
-Or from source:
+From source:
 
 ```bash
 git clone https://github.com/melikkul/KokTurk.git
@@ -122,30 +119,28 @@ cd KokTurk
 pip install -e .
 ```
 
-## Quick Start
+## Usage
 
-### Sentence-Level Disambiguation (98.3% EM)
+### Sentence Disambiguation
 
 ```python
 from kokturk import MorphoAnalyzer
 
 analyzer = MorphoAnalyzer(backends=["disambiguator"])
-results = analyzer.analyze_sentence("Cocuklar evlerinden cikti")
-for r in results:
-    print(r)
+results = analyzer.analyze_sentence("Çocuklar evlerinden çıktı")
 ```
 
-### Single-Word Analysis (84.7% EM)
+### Single Word Analysis
 
 ```python
 from kokturk import Atomizer
 
 atomizer = Atomizer()
-atomizer.to_canonical("evlerinden")  # -> "ev +PLU +POSS.3SG +ABL"
-atomizer.analyze_batch(["ev", "git", "guzel"])
+atomizer.to_canonical("evlerinden")
+# → "ev +PLU +POSS.3SG +ABL"
 ```
 
-### sklearn Integration
+### sklearn Pipeline
 
 ```python
 from kokturk.sklearn_ext import MorphoTransformer
@@ -160,89 +155,37 @@ pipe = Pipeline([
 ])
 ```
 
-### Text Cleaning (ariturk)
+### Text Cleaning (arı-türk)
 
 ```python
 from ariturk import TextCleaner, turkish_lower
 
 cleaner = TextCleaner()
-cleaner.clean("  TURKCE   metIn  ")  # -> "turkce metin"
-turkish_lower("I")  # -> "i" (Turkish-correct)
+cleaner.clean("  TÜRKÇE   metİn  ")  # → "türkçe metin"
+turkish_lower("I")  # → "ı"
 ```
 
 ### CLI
 
 ```bash
 python -m kokturk.cli.main analyze "evlerinden"
-# -> ev +PLU +POSS.3SG +ABL
+# → ev +PLU +POSS.3SG +ABL
 ```
-
-## Benchmarks
-
-### Morphological Analysis -- Disambiguation (7,144 test tokens)
-
-| Model | Test EM | Ambig EM | Params | Training |
-|-------|---------|----------|--------|----------|
-| **v6 Ensemble (5 seeds)** | **98.3%** | **93.8%** | 1M x 5 | 60 min CPU |
-| v6 seed=789 (best single) | 98.3% | 93.6% | 1M | 14 min CPU |
-| v6 seed=42 | 98.2% | 93.4% | 1M | 14 min CPU |
-| v6 seed=123 | 98.2% | 93.2% | 1M | 14 min CPU |
-
-### Morphological Analysis -- Generation (8,140 test tokens)
-
-| Model | Test EM | Root Acc | Tag F1 | Params |
-|-------|---------|----------|--------|--------|
-| v5.2 Dual-Head (106K) | 84.7% | 87.6% | 93.1% | 5.2M |
-| Dual-Head (80K) | 84.5% | 90.6% | 91.5% | 3.0M |
-| DH + Context (80K) | 83.8% | 92.3% | 91.9% | 3.9M |
-| Seq2seq baseline (80K) | 79.2% | 88.2% | 89.7% | 2.25M |
-
-### TTC-3600 Text Classification (5-fold CV)
-
-| Method | Macro-F1 | Type |
-|--------|----------|------|
-| **HYBRID: Atomized + BERTurk** | **0.947 +/- 0.009** | Ours |
-| BERTurk [CLS] + LogReg | 0.945 +/- 0.008 | Pretrained |
-| BERTurk [CLS] + SVM | 0.945 +/- 0.010 | Pretrained |
-| HYBRID: Atomized + FastText | 0.941 +/- 0.004 | Ours |
-| Atomized TF-IDF + LogReg | 0.939 +/- 0.010 | Ours |
-| Raw TF-IDF + LogReg | 0.936 +/- 0.007 | Baseline |
-| FastText embeddings + LogReg | 0.934 +/- 0.006 | Embedding |
-
-All pairwise differences tested via paired bootstrap (10K iterations, Holm-Bonferroni corrected).
-
-### Efficiency
-
-| System | Training Time | Model Size | Params |
-|--------|-------------|------------|--------|
-| v6 Disambiguator | 14 min (CPU) | ~4 MB | 1M trainable + 110M frozen |
-| v5.2 Dual-Head | 2 hours (CPU) | ~20 MB | 5.2M |
-| Zeyrek (rule-based) | -- | -- | ~6,380 tok/s |
-
-### Training Data
-
-| Tier | Tokens | Source |
-|------|--------|--------|
-| Gold | 2,496 | Human-annotated |
-| Silver-agreed | 16,525 | Multi-backend consensus |
-| Silver-auto | 87,016 | Zeyrek + resource augmentation |
-| **Total** | **106,037** | 7,732 unique roots, 71 tags |
 
 ## Project Structure
 
 ```
 src/
-├── kokturk/              # Core atomizer library
-│   ├── core/             # MorphoAnalyzer, datatypes, cache, phonology
-│   ├── models/           # Disambiguator, Dual-Head, GRU Seq2Seq, context encoders
-│   ├── sklearn_ext/      # sklearn Pipeline integration
-│   └── cli/              # Command-line interface
-├── ariturk/              # Text cleaning & normalization library
-├── train/                # Training scripts, curriculum, losses, HPO
-├── benchmark/            # Evaluation: intrinsic, classification, MIS, robustness
-├── resource/             # TR-Gold-Morph resource pipeline
-├── data/                 # Corpus processing pipeline
-└── classify/             # TTC-3600 classification experiments
+├── kokturk/          # Core morphological atomizer
+│   ├── core/         # MorphoAnalyzer, datatypes, cache, phonology
+│   ├── models/       # Disambiguator, Dual-Head Decoder, context encoders
+│   ├── sklearn_ext/  # sklearn integration
+│   └── cli/          # Command-line interface
+├── ariturk/          # Turkish text cleaning & normalization
+├── train/            # Training scripts, curriculum, losses
+├── benchmark/        # Evaluation suite
+├── resource/         # TR-Gold-Morph pipeline
+└── classify/         # TTC-3600 experiments
 ```
 
 ## Citation
@@ -262,7 +205,7 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 
-- [Zeyrek](https://github.com/obulat/zeyrek) -- Python port of Zemberek
+- [Zeyrek](https://github.com/obulat/zeyrek) — Python port of Zemberek
 - [BOUN Treebank](https://github.com/UniversalDependencies/UD_Turkish-BOUN)
 - [UniMorph](https://unimorph.github.io/)
 - [BERTurk](https://github.com/stefan-it/turkish-bert) by Stefan Schweter
