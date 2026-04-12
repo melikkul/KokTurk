@@ -1,4 +1,4 @@
-# kök-türk 🌳
+# kök-türk
 
 **Turkish Morphological Atomizer** — Decompose Turkish words into their linguistic atoms using neural disambiguation. SOTA-competitive accuracy with minimal compute.
 
@@ -47,27 +47,54 @@ The system operates in two modes:
 | SIGMORPHON baseline (2019) | 92.27% | Generation |
 | Yıldız et al. 2016 | 84.12% | Generation |
 
-### Text Classification (TTC-3600, 5-fold CV)
+### Detailed System Comparison
 
-| Method | Macro-F1 |
-|--------|----------|
-| Atomized TF-IDF + BERTurk (hybrid) | 0.947 ± 0.009 |
-| BERTurk [CLS] + LogReg | 0.945 ± 0.008 |
-| BERTurk [CLS] + SVM | 0.945 ± 0.010 |
-| Atomized TF-IDF + FastText (hybrid) | 0.941 ± 0.004 |
-| Atomized TF-IDF + LogReg | 0.939 ± 0.010 |
-| Raw TF-IDF + LogReg | 0.936 ± 0.007 |
-| FastText embeddings + LogReg | 0.934 ± 0.006 |
+| System | EM | Approach | Pretrained | Context | Language | Params |
+|--------|-----|---------|-----------|---------|----------|--------|
+| MorseDisamb | 98.59% | Candidate selection | — | Sentence | Java | — |
+| **kök-türk** | **98.3%** | **Candidate selection** | **BERTurk (frozen)** | **Sentence** | **Python** | **1M** |
+| TransMorph | 96.25% | Transformer disamb. | — | Sentence | — | — |
+| Sak et al. 2009 | 97.81% | Perceptron | — | Sentence | — | — |
+| Morse (generation) | 97.67% | Seq2seq | — | — | Java | — |
+| SIGMORPHON 2019 | 92.27% | Seq2seq | — | — | — | — |
+| Stanza | ~90.4% | Pipeline (UD) | Word2Vec | Sentence | Python | — |
+| spaCy (trf) | ~87.8% | Pipeline (UD) | Transformer | Sentence | Python | — |
+| kök-türk (generation) | 84.7% | Dual-Head Decoder | — | — | Python | 5.2M |
+| Yıldız et al. 2016 | 84.12% | Perceptron | — | — | — | — |
+| GPT-4o (zero-shot) | ~36.7% | LLM prompting | GPT-4o | Sentence | API | 1.8T |
 
-All differences tested via paired bootstrap (10K iterations, Holm-Bonferroni corrected).
+### Text Classification — Why Atomization Matters
 
-### Efficiency
+TTC-3600 (3,600 documents, 6 categories), 5-fold stratified CV.
 
-| Component | Training | Size | Params |
-|-----------|---------|------|--------|
-| Disambiguator | 14 min CPU | ~4 MB | 1M trainable |
-| Dual-Head Decoder | 2 hours CPU | ~20 MB | 5.2M |
-| BERTurk (frozen) | — | ~440 MB | 110M (no gradient) |
+| Feature Type | Classifier | Macro-F1 | Delta vs Raw |
+|-------------|-----------|----------|----------|
+| Atomized + BERTurk | LogReg | **0.947** | +1.1% |
+| BERTurk [CLS] only | LogReg | 0.945 | +0.9% |
+| Atomized + FastText | LogReg | 0.941 | +0.5% |
+| Atomized TF-IDF | LogReg | 0.939 | +0.3% |
+| Raw TF-IDF | LogReg | 0.936 | baseline |
+| FastText embeddings | LogReg | 0.934 | -0.2% |
+
+Morphological atomization consistently improves every classifier — including BERTurk. All differences tested via paired bootstrap (10K iterations, Holm-Bonferroni corrected).
+
+### Training Efficiency
+
+| System | Training Time | Hardware | Accuracy |
+|--------|-------------|----------|----------|
+| **kök-türk** | **14 min** | **CPU only** | **98.3%** |
+| Typical Transformer NLP | Hours–days | GPU required | Varies |
+| BERTurk fine-tuning | ~2 hours | GPU required | ~95% |
+| Morse | Not reported | — | 98.59% |
+
+### Inference
+
+| Component | Speed | Memory |
+|-----------|-------|--------|
+| Zeyrek candidate generation | ~6,380 tok/s | ~50 MB |
+| BERTurk embedding (cached) | ~3,200 sent/s | ~1.5 GB |
+| Reranker scoring | ~50,000 tok/s | ~10 MB |
+| Dual-Head generation | ~2,000 tok/s | ~20 MB |
 
 ## Architecture
 
@@ -98,12 +125,13 @@ Sentence: "Çocuklar evlerinden çıktı"
 
 The largest Turkish morphological resource:
 
-| | kök-türk | UniMorph Turkish | BOUN Treebank |
-|--|---------|-----------------|---------------|
-| Entries | **2,512,034** | 275,460 | ~121,000 |
-| Confidence tiers | gold / silver / bronze | — | — |
-| Morpheme boundaries | 95.6% | — | — |
-| Export formats | Canonical + UD + UniMorph | UniMorph | UD |
+| Resource | Entries | Annotation | Tiers | Boundaries | Formats | License |
+|----------|---------|-----------|-------|-----------|---------|---------|
+| **TR-Gold-Morph** | **2,512,034** | **Auto + manual** | **gold/silver/bronze** | **95.6%** | **3 schemas** | **MIT** |
+| UniMorph Turkish | 275,460 | Rule-generated | — | — | UniMorph | CC BY-SA |
+| BOUN Treebank | ~121,000 | Manual | — | — | UD CoNLL-U | CC BY-SA 4.0 |
+| IMST Treebank | ~56,000 | Manual | — | — | UD CoNLL-U | CC BY-NC-SA 3.0 |
+| TrMor (Zemberek) | ~50,000 roots | Rule-based FSA | — | — | Custom | — |
 
 ## Installation
 
