@@ -1,4 +1,4 @@
-# kök-türk
+# Aksu
 
 **Turkish Morphological Atomizer** — Decompose Turkish words into their linguistic atoms using neural disambiguation. SOTA-competitive accuracy with minimal compute.
 
