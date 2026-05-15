@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kokturk"
+version = "1.0.0a0"
+description = "Deprecated alias for aksu.kokturk — please install aksu instead"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["../../LICENSE"]
+authors = [{name = "Melik Kul", email = "metinkul895@gmail.com"}]
+dependencies = ["aksu==1.0.0a0"]
+
+[project.urls]
+Homepage = "https://github.com/melikkul/Aksu"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["kokturk*"]
