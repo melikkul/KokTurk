@@ -49,10 +49,10 @@ def eval_one_seed(
     device: object,
     batch_size: int = 64,
 ) -> dict:
-    torch, DataLoader, BERTurkDisambiguator, DisambiguationDataset, collate, Vocab, evaluate, pre_cache_bert = _try_import()
+    torch, DataLoader, BERTurkDisambiguator, DisambiguationDataset, collate, Vocab, _evaluate, pre_cache_bert = _try_import()
 
-    char_vocab = Vocab.load(vocab_dir / "char_vocab.json")
-    tag_vocab  = Vocab.load(vocab_dir / "tag_vocab.json")
+    tag_vocab = Vocab.load(vocab_dir / "tag_vocab.json")
+    bert_path = "models/berturk"
 
     state = torch.load(str(ckpt_path), map_location=device, weights_only=True)
     if "model_config" in state:
@@ -60,38 +60,65 @@ def eval_one_seed(
     else:
         model_cfg = {
             "tag_vocab_size": state.get("tag_vocab_size", len(tag_vocab)),
-            "bert_path": "models/berturk",
+            "bert_path": bert_path,
         }
     # Checkpoint stores only the 21-key reranker head (frozen BERTurk excluded).
-    # BERTurkDisambiguator.__init__ loads BERTurk from bert_path; we then overlay
-    # the trained head weights with strict=False (BERTurk keys absent from ckpt).
+    # BERTurkDisambiguator.__init__ loads BERTurk from bert_path; overlay
+    # head weights with strict=False (BERTurk keys absent from checkpoint).
     model = BERTurkDisambiguator(**model_cfg)
-    missing, unexpected = model.load_state_dict(state["model_state_dict"], strict=False)
+    _, unexpected = model.load_state_dict(state["model_state_dict"], strict=False)
     if unexpected:
         raise RuntimeError(f"Unexpected checkpoint keys: {unexpected[:3]}")
     model.to(device)
     model.eval()
 
-    ds = DisambiguationDataset(test_path, char_vocab, tag_vocab)
+    # DisambiguationDataset(data_path, tag_vocab) — no char_vocab arg
+    ds = DisambiguationDataset(test_path, tag_vocab)
     loader = DataLoader(ds, batch_size=batch_size, shuffle=False, collate_fn=collate)
 
-    bert_cache = pre_cache_bert(ds, device)
-    metrics = evaluate(model, loader, device, bert_cache, tag_vocab)
+    # pre_cache_bert_embeddings(dataset, bert_path) — not device
+    bert_cache = pre_cache_bert(ds, bert_path)
 
-    # em_string: index candidates[i][pred_idx] for string-equality EM
+    # Custom eval loop: collect per-sample preds to compute em_string
     from aksu.benchmark.em import pred_index_to_strings, em_string as compute_em_string
 
-    pred_strings = pred_index_to_strings(
-        metrics["pred_indices"],
-        ds.candidate_strings,
-    )
-    gold_strings = [cs[gi] for cs, gi in zip(ds.candidate_strings, metrics["gold_indices"])]
+    pred_indices: list[int] = []
+    gold_indices: list[int] = []
+    correct = 0
+    total = 0
+
+    import torch as _torch  # already imported, alias avoids shadowing
+    with _torch.no_grad():
+        for batch in loader:
+            from aksu.train.train_disambiguator import _get_cached_embeds
+            cached_embeds = None
+            if bert_cache is not None:
+                cached_embeds = _get_cached_embeds(bert_cache, batch["sample_indices"])
+            logits, _ = model(
+                sentence_texts=batch["sentence_texts"],
+                target_positions=batch["target_positions"],
+                candidate_ids=batch["candidate_ids"],
+                candidate_mask=batch["candidate_mask"],
+                cached_bert_embeds=cached_embeds,
+            )
+            preds = logits.argmax(dim=-1)
+            gold = batch["gold_indices"].to(device)
+            correct += (preds == gold).sum().item()
+            total += len(gold)
+            pred_indices.extend(preds.tolist())
+            gold_indices.extend(gold.tolist())
+
+    em_argmax = correct / total if total else 0.0
+
+    candidate_strings = [s["candidates"] for s in ds.samples]
+    pred_strings = pred_index_to_strings(pred_indices, candidate_strings)
+    gold_strings = [cands[gi] for cands, gi in zip(candidate_strings, gold_indices)]
     em_s = compute_em_string(pred_strings, gold_strings)
 
     return {
-        "em_argmax": metrics["em_argmax"],
+        "em_argmax": em_argmax,
         "em_string": em_s,
-        "n_tokens": len(ds),
+        "n_tokens": total,
         "checkpoint": str(ckpt_path),
     }
 
