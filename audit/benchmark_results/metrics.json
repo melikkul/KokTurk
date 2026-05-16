@@ -1,25 +1,42 @@
 {
   "em_argmax_ensemble": 0.9830,
+  "em_argmax_std": 0.0011,
   "em_string_ensemble": null,
   "em_string_single_seed_min": null,
   "em_string_single_seed_max": null,
-  "em_argmax_std": 0.0011,
-  "training_wall_clock_min": 14,
+
+  "training_wall_clock_min": null,
   "training_hardware": "TRUBA Orfoz (Intel Xeon Platinum 8362, CPU-only)",
-  "zeyrek_tok_per_sec": 1209,
-  "zeyrek_hardware": "Intel Xeon Platinum 8480+ (login node; authoritative run: Orfoz via SLURM)",
+
+  "zeyrek_tok_per_sec": null,
+  "zeyrek_hardware": null,
+
   "berturk_sent_per_sec": null,
   "reranker_tok_per_sec": null,
   "dualhead_tok_per_sec": null,
   "dualhead_em": null,
+
   "dataset_v1_entries": 80537,
   "dataset_v2_entries": null,
   "dataset_boundary_coverage": null,
-  "classification_macro_f1_atomized_berturk": 0.947,
+
+  "classification_macro_f1_atomized_berturk": null,
+
   "notes": {
-    "em_string_ensemble": "pending SLURM eval run (submit_v6_eval_aksu.sh)",
-    "dataset_v2_entries": "pending corpus harvest (2.5M target; autolabel pipeline ready)",
-    "berturk_sent_per_sec": "pending inference benchmark SLURM run",
-    "zeyrek_tok_per_sec": "login-node measurement; Orfoz run will be authoritative"
+    "em_argmax_ensemble":  "measured: stored ensemble result from models/v6/ensemble_results.json",
+    "em_argmax_std":       "measured: std over 5 seeds from models/v6/ensemble_results.json",
+    "em_string_ensemble":  "pending: submit_v6_eval_aksu.sh on akya-cuda",
+    "em_string_single_seed_min": "pending: submit_v6_eval_aksu.sh — min over 5 seeds",
+    "em_string_single_seed_max": "pending: submit_v6_eval_aksu.sh — max over 5 seeds",
+    "training_wall_clock_min": "pending: re-timing on Orfoz via submit_train_disambiguator.sh; prior 14min from STATUS.md not verified in v1.0.0",
+    "zeyrek_tok_per_sec":  "pending: Orfoz authoritative run via submit_zeyrek_benchmark.sh (prior login-node 1209 tok/s is a diagnostic value only, not a README claim)",
+    "berturk_sent_per_sec": "pending: scripts/benchmark_inference.py via SLURM",
+    "reranker_tok_per_sec": "pending: scripts/benchmark_inference.py via SLURM",
+    "dualhead_tok_per_sec": "pending: requires dualhead_v2 checkpoint (submit_dualhead_train.sh)",
+    "dualhead_em":         "pending: scripts/eval_dualhead.py post-training",
+    "dataset_v1_entries":  "measured: wc -l data/gold/tr_gold_morph_v1.jsonl == 80537",
+    "dataset_v2_entries":  "pending: 2.5M autolabel via submit_autolabel.sh (pipeline ready)",
+    "dataset_boundary_coverage": "pending: requires dataset_v2 build",
+    "classification_macro_f1_atomized_berturk": "pending: TTC-3600 dataset not yet acquired (Akin & Akin 2007 email-request); deferred to v1.1 per plan R8 resolution"
   }
 }
