@@ -34,3 +34,8 @@ One line per step: date · commit SHA (or "uncommitted") · workstream-step · s
 | 2026-05-16 | 3354d0a | Phase D: TTC-3600 all 3 acquisition attempts failed — re-deferred to v1.1 | ✅ |
 | 2026-05-16 | pending | SLURM 5782205 (v6_eval_cpu/orfoz) resubmitted — expected 60-90 min | ⏳ |
 | 2026-05-16 | pending | SLURM 5782206 (inference_benchmark_cpu/orfoz) resubmitted — expected 1-3h | ⏳ |
+| 2026-05-16 | e18ac2e | SLURM 5782205 (v6_eval_cpu/orfoz) FAILED — 'int' > 'Vocab' TypeError in DisambiguationDataset args; complete rewrite of eval_one_seed() | ❌→🔧 |
+| 2026-05-16 | pending | SLURM 5782206 (inference_benchmark_cpu/orfoz) COMPLETED — reranker_tok_per_sec=517.7; ingested into metrics.json | ✅ |
+| 2026-05-16 | pending | SLURM 5782486 (dualhead_train_cpu/orfoz) RUNNING — epoch ~14/50, improving; root_acc=0.50, tag_acc=0.80 | ⏳ |
+| 2026-05-16 | 73f78ec | fix(eval): complete rewrite of eval_one_seed() — correct DisambiguationDataset/pre_cache_bert/evaluate API + custom em_string loop | ✅ |
+| 2026-05-16 | pending | SLURM 5782508 (v6_eval_cpu/orfoz) resubmitted with fixed script — expected 60-90 min | ⏳ |
