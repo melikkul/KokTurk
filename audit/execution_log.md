@@ -28,4 +28,9 @@ One line per step: date · commit SHA (or "uncommitted") · workstream-step · s
 | 2026-05-16 | pending | SLURM 5782174 (dualhead_train/akya-cuda) — CANCELED (moved to Orfoz CPU) | ❌→✅ |
 | 2026-05-16 | pending | SLURM 5782202 (v6_eval_cpu/orfoz) submitted — expected 60-90 min | ⏳ |
 | 2026-05-16 | pending | SLURM 5782203 (dualhead_train_v1_cpu/orfoz) submitted — expected 4-8h | ⏳ |
-| 2026-05-16 | pending | SLURM 5782204 (inference_benchmark_cpu/orfoz) submitted — expected 1-3h | ⏳ |
+| 2026-05-16 | pending | SLURM 5782204 (inference_benchmark_cpu/orfoz) COMPLETED — BERTurk=112.8 sent/s; reranker failed ('model_config' key missing) | ✅/❌ |
+| 2026-05-16 | pending | SLURM 5782202 (v6_eval_cpu/orfoz) FAILED — TypeError in eval_disambiguator.py:98 (tuple+list concat); fixed | ❌→⏳ |
+| 2026-05-16 | e18ac2e | fix(eval): eval_disambiguator.py TypeError + benchmark_inference.py checkpoint key fallback | ✅ |
+| 2026-05-16 | 3354d0a | Phase D: TTC-3600 all 3 acquisition attempts failed — re-deferred to v1.1 | ✅ |
+| 2026-05-16 | pending | SLURM 5782205 (v6_eval_cpu/orfoz) resubmitted — expected 60-90 min | ⏳ |
+| 2026-05-16 | pending | SLURM 5782206 (inference_benchmark_cpu/orfoz) resubmitted — expected 1-3h | ⏳ |

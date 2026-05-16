@@ -90,7 +90,7 @@ Numbers below are taken verbatim from their respective publications. They are no
 | Component | Speed | Memory | Notes |
 |-----------|-------|--------|-------|
 | Zeyrek candidate generation | ~1537.3 tok/s | ~267 MB | Intel(R) Xeon(R) Platinum 8480+ |
-| BERTurk embedding (cached) | pending SLURM run | ~1.5 GB | |
+| BERTurk embedding (cached) | 112.8 sent/s | ~1.5 GB | |
 | Reranker scoring | pending SLURM run | ~10 MB | |
 | Dual-Head generation | pending SLURM run | ~20 MB | |
 
