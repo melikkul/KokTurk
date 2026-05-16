@@ -57,6 +57,85 @@ The result is a linguistically transparent representation every downstream task 
 - **TR-Gold-Morph corpus**: 80,537 manually validated annotations across gold and silver tiers — the largest public Turkish morphological resource.
 - **Honest benchmarks**: Every number traces to a runnable script and a JSON artifact in `audit/benchmark_results/`.
 
+## Installation
+
+From source (recommended until PyPI publish — see [Roadmap](#roadmap)):
+
+```bash
+git clone https://github.com/melikkul/Aksu.git
+cd Aksu
+pip install -e ".[dev,benchmark,train,data]"
+```
+
+Once published on PyPI:
+
+```bash
+pip install aksu                    # core only
+pip install "aksu[train]"           # + MLflow, Optuna, Transformers
+pip install "aksu[benchmark]"       # + SciPy (significance tests)
+pip install "aksu[data]"            # + HuggingFace Datasets, diskcache
+```
+
+## Quick Start
+
+**1. Single word:**
+
+```python
+from aksu import Atomizer
+
+atomizer = Atomizer(backend="zeyrek")
+atomizer.to_canonical("evlerinden")
+# → ev +Noun +POSS.3PL +ABL
+```
+
+**2. Sentence disambiguation:**
+
+```python
+from aksu import MorphoAnalyzer
+
+analyzer = MorphoAnalyzer(backends=["disambiguator"])
+results = analyzer.analyze_sentence("Çocuklar evlerinden çıktı")
+# → list of TokenAnalysis objects, one per word
+```
+
+**3. sklearn pipeline** (compat import; see [Migration](#migration-from-kokturk)):
+
+```python
+from aksu.kokturk.sklearn_ext import MorphoTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+
+pipe = Pipeline([
+    ("morph", MorphoTransformer(output="atomized")),
+    ("tfidf", TfidfVectorizer()),
+    ("clf",   LogisticRegression()),
+])
+```
+
+**4. CLI:**
+
+```bash
+aksu analyze "evlerinden"
+# → evlerinden           → ev +Noun +POSS.3PL +ABL
+```
+
+**Text cleaning (arı-türk):**
+
+```python
+from aksu import TextCleaner
+
+TextCleaner().clean("  TÜRKÇE   metİn  ")
+# → türkçe metin
+```
+
+```python
+from aksu import turkish_lower
+
+turkish_lower("I")
+# → ı
+```
+
 ## How It Works
 
 Aksu operates in two modes depending on whether a word is in Zeyrek's lexicon.
@@ -139,112 +218,6 @@ CPU throughput on shared SLURM nodes (Orfoz) varies ±30–50% by co-scheduling.
 
 [^cpu-variability]: CPU throughput varies ±30–50% on shared Orfoz nodes; treat as order-of-magnitude guidance only.
 
-## Dataset — TR-Gold-Morph
-
-| Version | Entries | Tiers | Status | License |
-|---------|---------|-------|--------|---------|
-| **TR-Gold-Morph v1** | **80,537** | gold 2,496 / silver 78,041 | ✅ Released | CC BY 4.0 |
-| TR-Gold-Morph v2 | ~2.5M target (pipeline ready, harvest pending v1.1) | gold / silver / bronze | 🚧 v1.1 roadmap | CC BY 4.0 + per-shard CC BY-SA |
-
-Comparison with other public resources:
-
-| Resource | Entries | Annotation | License |
-|----------|---------|-----------|---------|
-| **TR-Gold-Morph v1** | **80,537** | Auto + manual | CC BY 4.0 |
-| UniMorph Turkish | 275,460 | Rule-generated | CC BY-SA |
-| BOUN Treebank | ~121,000 | Manual | CC BY-SA 4.0 |
-| IMST Treebank | ~56,000 | Manual | CC BY-NC-SA 3.0 |
-
-**Provenance:** TR-Gold-Morph v1 derives from BOUN Treebank and Zeyrek candidate sets.
-Gold tier: 2,496 linguist-verified entries. Silver tier: 78,041 ensemble-confident entries.
-
-TR-Gold-Morph v2 (2.5M target): autolabel pipeline is ready in this repository.
-Sources: OSCAR-tr (CC0/CC-BY-4.0), mC4-tr (ODC-BY), Wikipedia-tr (CC-BY-SA-3.0),
-BOUN Treebank (CC-BY-SA-4.0). IMST-UD used only for internal evaluation (NC clause).
-Source manifest: `data/external/manifest.json`.
-
-HuggingFace: `melikkul/tr-gold-morph` (v2 upload pending). License: CC BY 4.0 (main corpus).
-BOUN/Wikipedia-derived shards carry CC BY-SA — see [LICENSE-DATA](LICENSE-DATA).
-
-## Installation
-
-From source (recommended until PyPI publish — see [Roadmap](#roadmap)):
-
-```bash
-git clone https://github.com/melikkul/Aksu.git
-cd Aksu
-pip install -e ".[dev,benchmark,train,data]"
-```
-
-Once published on PyPI:
-
-```bash
-pip install aksu                    # core only
-pip install "aksu[train]"           # + MLflow, Optuna, Transformers
-pip install "aksu[benchmark]"       # + SciPy (significance tests)
-pip install "aksu[data]"            # + HuggingFace Datasets, diskcache
-```
-
-## Quick Start
-
-**1. Single word:**
-
-```python
-from aksu import Atomizer
-
-atomizer = Atomizer(backend="zeyrek")
-atomizer.to_canonical("evlerinden")
-# → ev +Noun +POSS.3PL +ABL
-```
-
-**2. Sentence disambiguation:**
-
-```python
-from aksu import MorphoAnalyzer
-
-analyzer = MorphoAnalyzer(backends=["disambiguator"])
-results = analyzer.analyze_sentence("Çocuklar evlerinden çıktı")
-# → list of TokenAnalysis objects, one per word
-```
-
-**3. sklearn pipeline** (compat import; see [Migration](#migration-from-kokturk)):
-
-```python
-from aksu.kokturk.sklearn_ext import MorphoTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-
-pipe = Pipeline([
-    ("morph", MorphoTransformer(output="atomized")),
-    ("tfidf", TfidfVectorizer()),
-    ("clf",   LogisticRegression()),
-])
-```
-
-**4. CLI:**
-
-```bash
-aksu analyze "evlerinden"
-# → evlerinden           → ev +Noun +POSS.3PL +ABL
-```
-
-**Text cleaning (arı-türk):**
-
-```python
-from aksu import TextCleaner
-
-TextCleaner().clean("  TÜRKÇE   metİn  ")
-# → türkçe metin
-```
-
-```python
-from aksu import turkish_lower
-
-turkish_lower("I")
-# → ı
-```
-
 ## Reproducing the Results
 
 All numbers are stored in `audit/benchmark_results/metrics.json` and generated by committed scripts.
@@ -282,6 +255,33 @@ Hardware used:
 | Disambiguation eval (5-seed ensemble) | akya-cuda GPU | ~2 h |
 | DualHead training | akya-cuda GPU | ~3 h |
 | Zeyrek candidate generation | Any CPU laptop | 1537.3 tok/s |
+
+## Dataset — TR-Gold-Morph
+
+| Version | Entries | Tiers | Status | License |
+|---------|---------|-------|--------|---------|
+| **TR-Gold-Morph v1** | **80,537** | gold 2,496 / silver 78,041 | ✅ Released | CC BY 4.0 |
+| TR-Gold-Morph v2 | ~2.5M target (pipeline ready, harvest pending v1.1) | gold / silver / bronze | 🚧 v1.1 roadmap | CC BY 4.0 + per-shard CC BY-SA |
+
+Comparison with other public resources:
+
+| Resource | Entries | Annotation | License |
+|----------|---------|-----------|---------|
+| **TR-Gold-Morph v1** | **80,537** | Auto + manual | CC BY 4.0 |
+| UniMorph Turkish | 275,460 | Rule-generated | CC BY-SA |
+| BOUN Treebank | ~121,000 | Manual | CC BY-SA 4.0 |
+| IMST Treebank | ~56,000 | Manual | CC BY-NC-SA 3.0 |
+
+**Provenance:** TR-Gold-Morph v1 derives from BOUN Treebank and Zeyrek candidate sets.
+Gold tier: 2,496 linguist-verified entries. Silver tier: 78,041 ensemble-confident entries.
+
+TR-Gold-Morph v2 (2.5M target): autolabel pipeline is ready in this repository.
+Sources: OSCAR-tr (CC0/CC-BY-4.0), mC4-tr (ODC-BY), Wikipedia-tr (CC-BY-SA-3.0),
+BOUN Treebank (CC-BY-SA-4.0). IMST-UD used only for internal evaluation (NC clause).
+Source manifest: `data/external/manifest.json`.
+
+HuggingFace: `melikkul/tr-gold-morph` (v2 upload pending). License: CC BY 4.0 (main corpus).
+BOUN/Wikipedia-derived shards carry CC BY-SA — see [LICENSE-DATA](LICENSE-DATA).
 
 ## Limitations and Known Gaps
 
