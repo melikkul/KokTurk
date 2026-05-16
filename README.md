@@ -1,7 +1,14 @@
 
 # Aksu
 
-**Turkish Morphological Atomizer** — Decompose Turkish words into their linguistic atoms using neural disambiguation. SOTA-competitive accuracy with minimal compute.
+**Neural Turkish morphological atomizer — root + ordered tags, no GPU required.**
+
+[![Python](https://img.shields.io/pypi/pyversions/aksu.svg)](https://pypi.org/project/aksu/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/melikkul/Aksu/actions/workflows/ci.yml/badge.svg)](https://github.com/melikkul/Aksu/actions/workflows/ci.yml)
+
+Turkish is agglutinative: a single word can carry the meaning of a full English phrase.
+Aksu decomposes it into root + morphological atoms — the building block every downstream NLP task needs.
 
 ```python
 from aksu import Atomizer
@@ -11,13 +18,11 @@ atomizer.to_canonical("evlerinden")
 # → ev +Noun +POSS.3PL +ABL
 ```
 
-## Highlights
-
 | | |
 |---|---|
-| 🎯 **98.3% Exact Match** | SOTA-competitive morphological disambiguation (em_argmax, 5-seed ensemble) |
-| ⚡ **16.71 min CPU training** | No GPU required — frozen BERTurk + 1M param reranker |
-| 📚 **80,537 entry gold corpus** | Manually validated Turkish morphological annotations |
+| 🎯 **98.3% Exact Match** | SOTA-competitive disambiguation (em_argmax, 5-seed ensemble) |
+| ⚡ **16.71 min CPU training** | Frozen BERTurk encoder + 1M-param reranker — no GPU needed |
+| 📚 **80,537 annotated entries** | TR-Gold-Morph v1 — largest public Turkish morphological corpus |
 
 ## How It Works
 
