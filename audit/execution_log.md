@@ -53,3 +53,8 @@ One line per step: date · commit SHA (or "uncommitted") · workstream-step · s
 | 2026-05-16 | pending | §0 HALT: dualhead_em=0.0 vs prior claim 84.7% (>1pp gap); halt report written — awaiting user decision on options 1-4 | 🛑 |
 | 2026-05-16 | pending | Diagnostic: vocab sizes verified correct (char=106, tag=7807, root=3871); training-set EM also 0.0%; root cause confirmed = exposure bias + undertraining (not a vocab bug) | ✅ |
 | 2026-05-16 | pending | Resolution (Option 3): DualHead EM → N/A in README template; halt report updated with diagnosis; metrics.json note → DEFERRED; README rebuilt; CI gate passes | ✅ |
+| 2026-05-16 | d691f891 | PHASE P: pre-release snapshot — 249 tests pass; metrics gate passes; tree clean; v1.0.0-rc1 tagged locally | ✅ |
+| 2026-05-16 | d691f891 | PHASE Q: credentials gate — all 4 missing (HF_TOKEN, ZENODO_TOKEN, AWS keys); halt report filed | ⚠️ PARTIAL |
+| 2026-05-16 | d691f891 | PHASE S.1: local build — aksu-1.0.0a0.whl (325KB) + .tar.gz (266KB); twine check PASSED for both | ✅ |
+| 2026-05-16 | d691f891 | PHASE R/S.2/S.3/T/U/V/W: BLOCKED on credentials; see audit/halt_reports/2026-05-16-publish-credentials.md | ❌ |
+| 2026-05-16 | pending | PHASE X: final release report written — audit/v1.0.0_release_report_v3.md; PARTIAL verdict | ✅ |
