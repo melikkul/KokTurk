@@ -1,0 +1,61 @@
+name: Publish compat shims to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish-kokturk-shim:
+    name: Publish kokturk compat shim
+    runs-on: ubuntu-latest
+    environment: pypi-shims
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build tools
+        run: pip install build
+      - name: Build kokturk shim
+        run: python -m build compat/kokturk/
+      - name: Publish kokturk to TestPyPI (pre-release)
+        if: contains(github.ref, 'a') || contains(github.ref, 'b') || contains(github.ref, 'rc')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: compat/kokturk/dist/
+      - name: Publish kokturk to PyPI (release)
+        if: "!contains(github.ref, 'a') && !contains(github.ref, 'b') && !contains(github.ref, 'rc')"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: compat/kokturk/dist/
+
+  publish-ariturk-shim:
+    name: Publish ariturk compat shim
+    runs-on: ubuntu-latest
+    environment: pypi-shims
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build tools
+        run: pip install build
+      - name: Build ariturk shim
+        run: python -m build compat/ariturk/
+      - name: Publish ariturk to TestPyPI (pre-release)
+        if: contains(github.ref, 'a') || contains(github.ref, 'b') || contains(github.ref, 'rc')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: compat/ariturk/dist/
+      - name: Publish ariturk to PyPI (release)
+        if: "!contains(github.ref, 'a') && !contains(github.ref, 'b') && !contains(github.ref, 'rc')"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: compat/ariturk/dist/

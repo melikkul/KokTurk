@@ -1,0 +1,36 @@
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]*"
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+      - name: Extract changelog section
+        id: changelog
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          # Extract lines between [VERSION] header and next [version] header
+          awk "/^\[${VERSION}\]/{found=1; next} found && /^\[/{exit} found{print}" CHANGELOG.md \
+            > /tmp/release_notes.md || echo "See CHANGELOG.md for details." > /tmp/release_notes.md
+          echo "notes_file=/tmp/release_notes.md" >> "$GITHUB_OUTPUT"
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Aksu v${{ steps.version.outputs.version }}"
+          body_path: ${{ steps.changelog.outputs.notes_file }}
+          draft: false
+          prerelease: ${{ contains(github.ref, 'a') || contains(github.ref, 'b') || contains(github.ref, 'rc') }}
