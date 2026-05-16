@@ -26,9 +26,15 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 
-def _load_vocab(path: Path) -> dict:
-    """Load vocab JSON → {token: index} dict."""
-    return json.loads(path.read_text(encoding="utf-8"))
+def _load_vocab(path: Path) -> dict[str, int]:
+    """Load vocab JSON → {token: index} dict.
+
+    Handles both list format (token at position = index) and dict format.
+    """
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(raw, list):
+        return {token: idx for idx, token in enumerate(raw)}
+    return raw
 
 
 def _vocab_inv(vocab: dict[str, int]) -> list[str]:
@@ -86,23 +92,48 @@ def evaluate(
     import pathlib
     torch.serialization.add_safe_globals([pathlib.PosixPath])
     state = torch.load(str(ckpt_path), map_location=device, weights_only=True)
-    model_cfg: dict = state["model_config"]
-    model = DualHeadAtomizer(**model_cfg)
-    model.load_state_dict(state["model_state_dict"])
-    model.eval()
-    model.to(device)
-    logger.info("Model loaded — %d parameters", sum(p.numel() for p in model.parameters()))
 
     # -----------------------------------------------------------------------
-    # Load vocabularies
+    # Load vocabularies (needed before model construction for vocab sizes)
     # -----------------------------------------------------------------------
     char_vocab: dict[str, int] = _load_vocab(char_vocab_path)
     tag_vocab: dict[str, int] = _load_vocab(tag_vocab_path)
     char_vocab_inv = _vocab_inv(char_vocab)
     tag_vocab_inv = _vocab_inv(tag_vocab)
-
-    # Determine special indices from the vocab (fall back to model defaults)
     unk_char_idx: int = char_vocab.get("<unk>", 0)
+
+    # -----------------------------------------------------------------------
+    # Reconstruct model — support both checkpoint formats:
+    #   new: {"model_config": {...}, "model_state_dict": {...}}
+    #   old (training script): {"args": {...}, "model": state_dict, ...}
+    # -----------------------------------------------------------------------
+    if "model_config" in state:
+        model_cfg: dict = state["model_config"]
+        state_dict = state["model_state_dict"]
+    else:
+        # Old training-script format: reconstruct config from saved args + vocab sizes
+        args = state["args"]
+        root_vocab_path_from_args = args.get("root_vocab", str(tag_vocab_path.parent / "root_vocab.json"))
+        root_vocab_for_cfg = _load_vocab(Path(str(root_vocab_path_from_args)))
+        model_cfg = {
+            "char_vocab_size": len(char_vocab),
+            "tag_vocab_size": len(tag_vocab),
+            "root_vocab_size": len(root_vocab_for_cfg),
+            "embed_dim": int(args.get("embed_dim", 64)),
+            "hidden_dim": int(args.get("hidden_dim", 128)),
+            "num_layers": int(args.get("num_layers", 2)),
+            "dropout": float(args.get("dropout", 0.3)),
+            "root_head_type": str(args.get("root_head_type", "mlp")),
+            "variational_dropout": float(args.get("variational_dropout", 0.0)),
+            "weight_dropout": float(args.get("weight_dropout", 0.0)),
+        }
+        state_dict = state["model"]
+
+    model = DualHeadAtomizer(**model_cfg)
+    model.load_state_dict(state_dict, strict=False)
+    model.eval()
+    model.to(device)
+    logger.info("Model loaded — %d parameters", sum(p.numel() for p in model.parameters()))
 
     # -----------------------------------------------------------------------
     # Load test records
@@ -125,18 +156,25 @@ def evaluate(
         with torch.no_grad():
             predictions = model.greedy_decode(
                 chars,
-                root_vocab_inv=None,  # rendered as root_<idx> if vocab not provided
+                root_vocab_inv=None,
                 tag_vocab_inv=tag_vocab_inv,
             )
         return predictions[0] if predictions else ""
 
     # -----------------------------------------------------------------------
-    # Extract root_vocab_inv from checkpoint if available
+    # Extract root_vocab_inv from checkpoint or args path
     # -----------------------------------------------------------------------
     root_vocab_inv: list[str] | None = None
     if "root_vocab" in state:
         root_vocab_raw: dict[str, int] = state["root_vocab"]
         root_vocab_inv = _vocab_inv(root_vocab_raw)
+    elif "args" in state:
+        args_rv_path = state["args"].get("root_vocab")
+        if args_rv_path and args_rv_path != "None":
+            try:
+                root_vocab_inv = _vocab_inv(_load_vocab(Path(str(args_rv_path))))
+            except FileNotFoundError:
+                pass
 
     # Re-define with root_vocab_inv if available
     def _greedy_with_roots(word: str) -> str:

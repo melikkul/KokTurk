@@ -378,15 +378,39 @@ def benchmark_dualhead(
         torch.serialization.add_safe_globals([_pathlib.PosixPath])
         device = torch.device("cpu")
         state = torch.load(str(ckpt), map_location=device, weights_only=True)
-        model_cfg = state["model_config"]
-        model = DualHeadAtomizer(**model_cfg)
-        model.load_state_dict(state["model_state_dict"])
-        model.eval()
-        model.to(device)
 
-        # Load vocabs from the same directory as the checkpoint
+        # Load vocabs from models/vocabs/ (relative to project root)
         vocab_dir = ckpt.parent.parent / "vocabs"
         char_vocab = Vocab.load(vocab_dir / "char_vocab.json")
+        tag_vocab = Vocab.load(vocab_dir / "tag_vocab.json")
+        root_vocab = Vocab.load(vocab_dir / "root_vocab.json")
+
+        # Support both checkpoint formats:
+        #   new: {"model_config": {...}, "model_state_dict": {...}}
+        #   old (training script): {"args": {...}, "model": state_dict, ...}
+        if "model_config" in state:
+            model_cfg = state["model_config"]
+            state_dict = state["model_state_dict"]
+        else:
+            args = state["args"]
+            model_cfg = {
+                "char_vocab_size": len(char_vocab),
+                "tag_vocab_size": len(tag_vocab),
+                "root_vocab_size": len(root_vocab),
+                "embed_dim": int(args.get("embed_dim", 64)),
+                "hidden_dim": int(args.get("hidden_dim", 128)),
+                "num_layers": int(args.get("num_layers", 2)),
+                "dropout": float(args.get("dropout", 0.3)),
+                "root_head_type": str(args.get("root_head_type", "mlp")),
+                "variational_dropout": float(args.get("variational_dropout", 0.0)),
+                "weight_dropout": float(args.get("weight_dropout", 0.0)),
+            }
+            state_dict = state["model"]
+
+        model = DualHeadAtomizer(**model_cfg)
+        model.load_state_dict(state_dict, strict=False)
+        model.eval()
+        model.to(device)
     except Exception as exc:  # noqa: BLE001
         return {
             "dualhead_tok_per_sec": None,
@@ -402,7 +426,7 @@ def benchmark_dualhead(
         max_len = max((len(w) for w in words), default=1)
         batch = torch.zeros(len(words), max_len + 2, dtype=torch.long)
         for i, word in enumerate(words):
-            indices = [char_vocab.get(ch, char_vocab.unk_idx) for ch in word]
+            indices = [char_vocab.encode(ch) for ch in word]
             batch[i, : len(indices)] = torch.tensor(indices, dtype=torch.long)
         return batch
 

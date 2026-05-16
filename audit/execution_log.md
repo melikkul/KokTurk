@@ -42,5 +42,11 @@ One line per step: date · commit SHA (or "uncommitted") · workstream-step · s
 | 2026-05-16 | pending | SLURM 5782486 (dualhead_train_cpu/orfoz) COMPLETED at 12:30 — 3748s (62.5 min) on orfoz360, exit 0 | ✅ |
 | 2026-05-16 | pending | SLURM 5782508 (v6_eval_cpu/orfoz) COMPLETED at 11:47 — per-seed mean 0.9815 (stable; canonical 0.9832 majority-vote kept) | ✅ |
 | 2026-05-16 | 0304ea2 | DualHead sidecars (best_model, final_model) written with forward provenance | ✅ |
-| 2026-05-16 | pending | SLURM 5782660 (dualhead_eval_cpu/orfoz) submitted — expected 30-60 min | ⏳ |
-| 2026-05-16 | pending | SLURM 5782661 (inference_benchmark_dualhead/orfoz) submitted — expected 30-60 min | ⏳ |
+| 2026-05-16 | pending | SLURM 5782660 (dualhead_eval_cpu/orfoz) FAILED — weights_only=True blocks PosixPath in checkpoint | ❌ |
+| 2026-05-16 | pending | SLURM 5782661 (inference_benchmark_dualhead/orfoz) COMPLETED — DualHead skipped (same PosixPath bug); reranker=623.7 tok/s | ✅/❌ |
+| 2026-05-16 | a7e8bf5 | fix(eval): add PosixPath to torch safe globals for PyTorch 2.6 weights_only compat | ✅ |
+| 2026-05-16 | pending | SLURM 5782779 (dualhead_eval_cpu/orfoz) FAILED — KeyError 'model_config': checkpoint uses old training format (keys: model/optimizer/epoch/best_val_loss/args) | ❌ |
+| 2026-05-16 | pending | SLURM 5782780 (inference_benchmark/orfoz) COMPLETED — berturk=67.9 sent/s, reranker=474.4 tok/s; DualHead skipped (same KeyError) | ✅/❌ |
+| 2026-05-16 | pending | fix(eval): eval_dualhead.py + benchmark_inference.py — handle old checkpoint format (args dict) + list vocab format | 🔧 |
+| 2026-05-16 | pending | SLURM 5782801 (dualhead_eval_cpu/orfoz) resubmitted with checkpoint format fix — expected 30-60 min | ⏳ |
+| 2026-05-16 | pending | SLURM 5782802 (dualhead_bench/orfoz) submitted — DualHead-only inference benchmark, merges into inference_throughput.json | ⏳ |
