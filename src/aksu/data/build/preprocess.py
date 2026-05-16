@@ -130,6 +130,26 @@ def preprocess_shard(
     }
 
 
+def _load_local_jsonl(path: Path, text_field: str = "text") -> list[str]:
+    """Read sentences from a pre-downloaded JSONL file (one JSON object per line)."""
+    texts: list[str] = []
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except json.JSONDecodeError:
+                texts.append(line)
+                continue
+            if isinstance(obj, str):
+                texts.append(obj)
+            elif isinstance(obj, dict):
+                texts.append(obj.get(text_field) or obj.get("sentence") or obj.get("text") or "")
+    return [t for t in texts if t.strip()]
+
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     ap = argparse.ArgumentParser()
@@ -137,6 +157,12 @@ def main() -> None:
     ap.add_argument("--max-tokens", type=int, default=None)
     ap.add_argument("--output-dir", default="data/intermediate")
     ap.add_argument("--dry-run", action="store_true", help="Print stats only")
+    ap.add_argument(
+        "--local-jsonl",
+        help="Path to a pre-downloaded JSONL file (one sentence/text per line). "
+             "Use this on HPC nodes without internet access. "
+             "If not given, streams from HuggingFace (requires internet).",
+    )
     args = ap.parse_args()
 
     from aksu.data.build.sources import SOURCES
@@ -144,19 +170,25 @@ def main() -> None:
     if source is None:
         ap.error(f"Unknown shard {args.shard!r}. Available: {[s.name for s in SOURCES]}")
 
-    logger.info("Loading shard %s from %s ...", source.name, source.url)
-
-    try:
-        from datasets import load_dataset
-        ds = load_dataset(source.url, split="train", streaming=True)
-        texts = [
-            row.get("text") or row.get("sentence") or ""
-            for row in ds
-            if row.get("text") or row.get("sentence")
-        ]
-    except Exception as e:
-        logger.error("Could not load shard: %s", e)
-        raise
+    if args.local_jsonl:
+        local_path = Path(args.local_jsonl)
+        if not local_path.exists():
+            ap.error(f"--local-jsonl path does not exist: {local_path}")
+        logger.info("Loading shard %s from local file %s ...", source.name, local_path)
+        texts = _load_local_jsonl(local_path)
+    else:
+        logger.info("Loading shard %s from HuggingFace %s ...", source.name, source.url)
+        try:
+            from datasets import load_dataset
+            ds = load_dataset(source.url, split="train", streaming=True)
+            texts = [
+                row.get("text") or row.get("sentence") or ""
+                for row in ds
+                if row.get("text") or row.get("sentence")
+            ]
+        except Exception as e:
+            logger.error("Could not load shard: %s", e)
+            raise
 
     if args.dry_run:
         logger.info("DRY RUN: first 10 texts from shard:")
