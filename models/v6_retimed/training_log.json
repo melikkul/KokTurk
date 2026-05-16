@@ -1,0 +1,8 @@
+{
+  "wall_clock_seconds": 1003,
+  "wall_clock_minutes": 16.71,
+  "slurm_job_id": "5782193",
+  "partition": "orfoz",
+  "hostname": "orfoz246",
+  "seed": 42
+}
