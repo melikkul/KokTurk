@@ -1,0 +1,14 @@
+{
+  "provenance": "backfilled",
+  "checkpoint_path": "models/dualhead_v1_cpu/best_model.pt",
+  "file_size_bytes": 36675441,
+  "backfilled_at": "2026-05-16T09:00:51.042280+00:00",
+  "training_commit_sha": null,
+  "training_config_hash": null,
+  "data_sha256": null,
+  "wall_clock_seconds": null,
+  "host_cpu": null,
+  "host_gpu": null,
+  "torch_version": "2.5.1+cu124",
+  "python_version": "3.9.18"
+}
